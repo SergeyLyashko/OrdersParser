@@ -1,4 +1,4 @@
-package handlers;
+package jsonhandlers;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -14,8 +14,8 @@ import java.lang.reflect.Type;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 
-@Service("ordersParser")
-public class OrdersParser {
+@Service("jsonParser")
+public class JsonParser {
 
     // TODO test
     private String filePath = "orders.json";
@@ -38,12 +38,8 @@ public class OrdersParser {
         this.jsonDeserializer = jsonDeserializer;
     }
 
-    public OrdersPack getOrdersPack(){
-        return ordersPack;
-    }
-
     public void parse() {
-        Type orderListType = new TypeToken<List<JsonOrder>>() {}.getType();
+        Type orderListType = new TypeToken<List<Order>>() {}.getType();
         Gson gson = new GsonBuilder()
                 .registerTypeAdapter(OrdersPack.class, jsonDeserializer)
                 .registerTypeAdapter(orderListType, ordersPackAdapter)

@@ -1,20 +1,29 @@
-package jsons;
+package orders;
 
-import handlers.JsonOrder;
+import com.opencsv.bean.CsvBindByPosition;
+import jsonhandlers.Order;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 /**
  * Order from json-file
  */
-@Component("jsonOrder")
+@Component("order")
 @Scope("prototype")
-public class JsonOrderImpl implements JsonOrder {
+public class OrderImpl implements Order {
 
+    @CsvBindByPosition(position = 0)
     private int orderId;
+
+    @CsvBindByPosition(position = 1)
     private double amount;
+
     private String currency;
+
+    @CsvBindByPosition(position = 2)
     private String comment;
+
+    // TODO перенести инициализацию ?
     private String fileName;
     private int line;
     private String result;

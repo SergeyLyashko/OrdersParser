@@ -1,11 +1,10 @@
-package handlers;
+package jsonhandlers;
 
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
 import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Service;
@@ -15,20 +14,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service("ordersPackAdapter")
-public class OrdersPackTypeAdapter extends TypeAdapter<List<JsonOrder>> implements OrdersPackAdapter, ApplicationContextAware {
+public class OrdersPackTypeAdapter extends TypeAdapter<List<Order>> implements OrdersPackAdapter, ApplicationContextAware {
 
     private ApplicationContext context;
-    private OrdersPack ordersPack;
 
-    @Autowired
-    public void setOrdersPack(OrdersPack ordersPack){
-        this.ordersPack = ordersPack;
-    }
-
+    // TODO ????
     @Override
-    public void write(JsonWriter jsonWriter, List<JsonOrder> orders) throws IOException {
+    public void write(JsonWriter jsonWriter, List<Order> orders) throws IOException {
         jsonWriter.beginArray();
-        for(JsonOrder order: orders){
+        for(Order order: orders){
             jsonWriter.beginObject();
             jsonWriter.name("orderId").value(order.getOrderId());
             jsonWriter.name("amount").value(order.getAmount());
@@ -43,12 +37,12 @@ public class OrdersPackTypeAdapter extends TypeAdapter<List<JsonOrder>> implemen
     }
 
     @Override
-    public List<JsonOrder> read(JsonReader jsonReader) throws IOException {
-        List<JsonOrder> orders = new ArrayList<>();
+    public List<Order> read(JsonReader jsonReader) throws IOException {
+        List<Order> orders = new ArrayList<>();
         jsonReader.beginArray();
         while (jsonReader.hasNext()){
             if(jsonReader.peek().equals(JsonToken.BEGIN_OBJECT)){
-                orders.add(createPack(jsonReader));
+                orders.add(createOrdersPack(jsonReader));
             }else{
                 jsonReader.skipValue();
             }
@@ -57,22 +51,22 @@ public class OrdersPackTypeAdapter extends TypeAdapter<List<JsonOrder>> implemen
         return orders;
     }
 
-    private JsonOrder createPack(JsonReader jsonReader) throws IOException {
-        JsonOrder jsonOrder = context.getBean("jsonOrder", JsonOrder.class);
+    private Order createOrdersPack(JsonReader jsonReader) throws IOException {
+        Order order = context.getBean("jsonOrder", Order.class);
         jsonReader.beginObject();
         while (jsonReader.hasNext()){
             switch (jsonReader.nextName()){
                 case "orderId":
-                    jsonOrder.setOrderId(jsonReader.nextInt());
+                    order.setOrderId(jsonReader.nextInt());
                     break;
                 case "amount":
-                    jsonOrder.setAmount(jsonReader.nextDouble());
+                    order.setAmount(jsonReader.nextDouble());
                     break;
                 case "currency":
-                    jsonOrder.setCurrency(jsonReader.nextString());
+                    order.setCurrency(jsonReader.nextString());
                     break;
                 case "comment":
-                    jsonOrder.setComment(jsonReader.nextString());
+                    order.setComment(jsonReader.nextString());
                     break;
                 default:
                     jsonReader.skipValue();
@@ -80,7 +74,7 @@ public class OrdersPackTypeAdapter extends TypeAdapter<List<JsonOrder>> implemen
             }
         }
         jsonReader.endObject();
-        return jsonOrder;
+        return order;
     }
 
     @Override

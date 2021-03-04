@@ -1,6 +1,6 @@
-package handlers;
+package jsonhandlers;
 
-public interface JsonOrder {
+public interface Order {
 
     void setOrderId(int orderId);
     int getOrderId();

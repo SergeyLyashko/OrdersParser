@@ -1,7 +1,7 @@
-package jsons;
+package orders;
 
-import handlers.JsonOrder;
-import handlers.OrdersPack;
+import jsonhandlers.Order;
+import jsonhandlers.OrdersPack;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -12,15 +12,15 @@ import java.util.List;
 @Component("ordersPack")
 public class OrdersPackImpl implements OrdersPack {
 
-    private List<JsonOrder> pack;
+    private List<Order> pack;
 
     @Override
-    public List<JsonOrder> getOrdersPack(){
+    public List<Order> getOrdersPack(){
         return pack;
     }
 
     @Override
-    public void add(List<JsonOrder> ordersPack) {
+    public void add(List<Order> ordersPack) {
         this.pack = ordersPack;
     }
 }

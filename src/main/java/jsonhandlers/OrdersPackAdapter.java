@@ -1,4 +1,4 @@
-package handlers;
+package jsonhandlers;
 
 import com.google.gson.stream.JsonReader;
 
@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface OrdersPackAdapter {
 
-    List<JsonOrder> read(JsonReader jsonReader) throws IOException;
+    List<Order> read(JsonReader jsonReader) throws IOException;
 }
