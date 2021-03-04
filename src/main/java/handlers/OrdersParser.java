@@ -17,7 +17,8 @@ import java.util.List;
 @Service("ordersParser")
 public class OrdersParser {
 
-    private String filePath;
+    // TODO test
+    private String filePath = "orders.json";
     private OrdersPack ordersPack;
     private OrdersPackAdapter ordersPackAdapter;
     private JsonDeserializer<OrdersPack> jsonDeserializer;
@@ -51,6 +52,12 @@ public class OrdersParser {
         if(inputStreamReader != null) {
             this.ordersPack = gson.fromJson(inputStreamReader, OrdersPack.class);
         }
+    }
+
+    // TODO test method
+    public void print(){
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        System.out.println(gson.toJson(ordersPack));
     }
 
     // TODO переписать на NIO

@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service("ordersPackAdapter")
-public class OrdersPackTypeAdapter extends TypeAdapter<OrdersPack> implements ApplicationContextAware {
+public class OrdersPackTypeAdapter extends TypeAdapter<List<JsonOrder>> implements OrdersPackAdapter, ApplicationContextAware {
 
     private ApplicationContext context;
     private OrdersPack ordersPack;
@@ -26,10 +26,9 @@ public class OrdersPackTypeAdapter extends TypeAdapter<OrdersPack> implements Ap
     }
 
     @Override
-    public void write(JsonWriter jsonWriter, OrdersPack ordersPack) throws IOException {
+    public void write(JsonWriter jsonWriter, List<JsonOrder> orders) throws IOException {
         jsonWriter.beginArray();
-        List<JsonOrder> pack = ordersPack.getOrdersPack();
-        for(JsonOrder order: pack){
+        for(JsonOrder order: orders){
             jsonWriter.beginObject();
             jsonWriter.name("orderId").value(order.getOrderId());
             jsonWriter.name("amount").value(order.getAmount());
@@ -44,7 +43,7 @@ public class OrdersPackTypeAdapter extends TypeAdapter<OrdersPack> implements Ap
     }
 
     @Override
-    public OrdersPack read(JsonReader jsonReader) throws IOException {
+    public List<JsonOrder> read(JsonReader jsonReader) throws IOException {
         List<JsonOrder> orders = new ArrayList<>();
         jsonReader.beginArray();
         while (jsonReader.hasNext()){
@@ -55,8 +54,7 @@ public class OrdersPackTypeAdapter extends TypeAdapter<OrdersPack> implements Ap
             }
         }
         jsonReader.endArray();
-        ordersPack.add(orders);
-        return ordersPack;
+        return orders;
     }
 
     private JsonOrder createPack(JsonReader jsonReader) throws IOException {
