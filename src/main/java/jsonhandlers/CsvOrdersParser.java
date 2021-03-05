@@ -14,19 +14,18 @@ import java.nio.file.Paths;
 import java.util.List;
 
 @Service("csvParser")
-public class CsvParser {
+public class CsvOrdersParser implements OrdersParser {
 
     private OrdersPack ordersPack;
-    // TODO test
-    private String filePath = "orders.csv";
 
     @Autowired
     public void setOrdersPack(OrdersPack ordersPack){
         this.ordersPack = ordersPack;
     }
 
-    public void parse() {
-        BufferedReader reader = reader(filePath);
+    @Override
+    public void parse(String fileName) {
+        BufferedReader reader = reader(fileName);
         if(reader != null){
             CSVReader csvReader = new CSVReader(reader);
             List<Order> orders = buildOrdersList(csvReader);

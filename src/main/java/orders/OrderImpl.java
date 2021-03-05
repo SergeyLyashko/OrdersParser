@@ -1,7 +1,6 @@
 package orders;
 
 import com.opencsv.bean.CsvBindByName;
-import com.opencsv.bean.CsvBindByPosition;
 import com.opencsv.bean.CsvNumber;
 import jsonhandlers.Order;
 import org.springframework.context.annotation.Scope;
@@ -31,7 +30,6 @@ public class OrderImpl implements Order {
     @CsvBindByName
     private String comment;
 
-    // TODO перенести инициализацию ?
     private String fileName;
     private int line;
     private String result;

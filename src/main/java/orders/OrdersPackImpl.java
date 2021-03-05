@@ -1,9 +1,12 @@
 package orders;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import jsonhandlers.Order;
 import jsonhandlers.OrdersPack;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -12,7 +15,7 @@ import java.util.List;
 @Component("ordersPack")
 public class OrdersPackImpl implements OrdersPack {
 
-    private List<Order> pack;
+    private final List<Order> pack = new ArrayList<>();
 
     @Override
     public List<Order> getOrdersPack(){
@@ -20,7 +23,13 @@ public class OrdersPackImpl implements OrdersPack {
     }
 
     @Override
+    public void print(){
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        System.out.println(gson.toJson(this));
+    }
+
+    @Override
     public void add(List<Order> ordersPack) {
-        this.pack = ordersPack;
+        pack.addAll(ordersPack);
     }
 }
