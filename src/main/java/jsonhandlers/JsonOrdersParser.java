@@ -17,14 +17,8 @@ import java.util.List;
 @Service("jsonParser")
 public class JsonOrdersParser implements OrdersParser {
 
-    private OrdersPack ordersPack;
     private OrdersPackAdapter ordersPackAdapter;
     private JsonDeserializer<OrdersPack> jsonDeserializer;
-
-    @Autowired
-    public void setOrdersPack(OrdersPack ordersPack){
-        this.ordersPack = ordersPack;
-    }
 
     @Autowired
     public void setOrdersPackAdapter(OrdersPackAdapter ordersPackAdapter){
@@ -45,7 +39,7 @@ public class JsonOrdersParser implements OrdersParser {
                 .create();
         BufferedReader reader = reader(fileName);
         if(reader != null) {
-            this.ordersPack = gson.fromJson(reader, OrdersPack.class);
+            gson.fromJson(reader, OrdersPack.class);
         }
     }
 

@@ -22,7 +22,6 @@ public class CommandLineFileNameArgs implements Runnable, ApplicationContextAwar
 
     @Override
     public void run() {
-
         Arrays.stream(files).forEach(file ->{
             try {
                 OrdersParser ordersParser = fileParser(file);
