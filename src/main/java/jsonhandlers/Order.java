@@ -1,5 +1,7 @@
 package jsonhandlers;
 
+import java.util.Currency;
+
 public interface Order {
 
     void setOrderId(int orderId);
@@ -8,8 +10,8 @@ public interface Order {
     void setAmount(double amount);
     double getAmount();
 
-    void setCurrency(String currency);
-    String getCurrency();
+    void setCurrency(Currency currency);
+    Currency getCurrency();
 
     void setComment(String comment);
     String getComment();

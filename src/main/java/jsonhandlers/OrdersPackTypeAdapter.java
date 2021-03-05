@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Currency;
 import java.util.List;
 
 @Service("ordersPackAdapter")
@@ -52,7 +53,7 @@ public class OrdersPackTypeAdapter extends TypeAdapter<List<Order>> implements O
     }
 
     private Order createOrdersPack(JsonReader jsonReader) throws IOException {
-        Order order = context.getBean("jsonOrder", Order.class);
+        Order order = context.getBean("order", Order.class);
         jsonReader.beginObject();
         while (jsonReader.hasNext()){
             switch (jsonReader.nextName()){
@@ -63,7 +64,7 @@ public class OrdersPackTypeAdapter extends TypeAdapter<List<Order>> implements O
                     order.setAmount(jsonReader.nextDouble());
                     break;
                 case "currency":
-                    order.setCurrency(jsonReader.nextString());
+                    order.setCurrency(Currency.getInstance(jsonReader.nextString()));
                     break;
                 case "comment":
                     order.setComment(jsonReader.nextString());

@@ -7,6 +7,8 @@ import jsonhandlers.Order;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import java.util.Currency;
+
 /**
  * Order from json-file
  */
@@ -20,12 +22,11 @@ public class OrderImpl implements Order {
     private int orderId;
 
     @CsvBindByName
-    //@CsvNumber(value = "#,##")
+    @CsvNumber(value = "#,##")
     private double amount;
 
-    //  TODO Currency https://docs.oracle.com/javase/8/docs/api/java/util/Currency.html?is-external=true
     @CsvBindByName
-    private String currency;
+    private Currency currency;
 
     @CsvBindByName
     private String comment;
@@ -56,12 +57,12 @@ public class OrderImpl implements Order {
     }
 
     @Override
-    public void setCurrency(String currency){
+    public void setCurrency(Currency currency){
         this.currency = currency;
     }
 
     @Override
-    public String getCurrency(){
+    public Currency getCurrency(){
         return currency;
     }
 
