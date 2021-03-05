@@ -1,4 +1,4 @@
-package jsonhandlers;
+package handlers;
 
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
@@ -8,6 +8,7 @@ import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Service;
+import parsers.OrdersPackAdapter;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -22,7 +23,7 @@ public class OrdersPackTypeAdapter extends TypeAdapter<List<Order>> implements O
     // TODO ????
     @Override
     public void write(JsonWriter jsonWriter, List<Order> orders) throws IOException {
-        jsonWriter.beginArray();
+        /*jsonWriter.beginArray();
         for(Order order: orders){
             jsonWriter.beginObject();
             jsonWriter.name("orderId").value(order.getOrderId());
@@ -34,7 +35,7 @@ public class OrdersPackTypeAdapter extends TypeAdapter<List<Order>> implements O
             jsonWriter.name("result").value(order.getResult());
             jsonWriter.endObject();
         }
-        jsonWriter.endArray();
+        jsonWriter.endArray();*/
     }
 
     @Override

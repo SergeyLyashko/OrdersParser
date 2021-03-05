@@ -2,8 +2,8 @@ package orders;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import jsonhandlers.Order;
-import jsonhandlers.OrdersPack;
+import handlers.Order;
+import handlers.OrdersPack;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;

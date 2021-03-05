@@ -1,7 +1,10 @@
-package jsonhandlers;
+package parsers;
 
 import com.opencsv.CSVReader;
 import com.opencsv.bean.CsvToBeanBuilder;
+import handlers.Order;
+import handlers.OrdersPack;
+import handlers.OrdersParser;
 import orders.OrderImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

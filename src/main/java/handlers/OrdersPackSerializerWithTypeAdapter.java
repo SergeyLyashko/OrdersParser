@@ -1,4 +1,4 @@
-package jsonhandlers;
+package handlers;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;

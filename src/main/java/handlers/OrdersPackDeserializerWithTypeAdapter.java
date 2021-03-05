@@ -1,4 +1,4 @@
-package jsonhandlers;
+package handlers;
 
 import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;

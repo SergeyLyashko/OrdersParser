@@ -2,7 +2,7 @@ package orders;
 
 import com.opencsv.bean.CsvBindByName;
 import com.opencsv.bean.CsvNumber;
-import jsonhandlers.Order;
+import handlers.Order;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 

@@ -1,9 +1,12 @@
-package jsonhandlers;
+package parsers;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.reflect.TypeToken;
+import handlers.Order;
+import handlers.OrdersPack;
+import handlers.OrdersParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

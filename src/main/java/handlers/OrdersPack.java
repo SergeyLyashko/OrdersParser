@@ -1,4 +1,4 @@
-package jsonhandlers;
+package handlers;
 
 import java.util.List;
 
