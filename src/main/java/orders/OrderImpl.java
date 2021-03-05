@@ -1,6 +1,8 @@
 package orders;
 
+import com.opencsv.bean.CsvBindByName;
 import com.opencsv.bean.CsvBindByPosition;
+import com.opencsv.bean.CsvNumber;
 import jsonhandlers.Order;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -12,15 +14,20 @@ import org.springframework.stereotype.Component;
 @Scope("prototype")
 public class OrderImpl implements Order {
 
-    @CsvBindByPosition(position = 0)
+    public OrderImpl(){}
+
+    @CsvBindByName
     private int orderId;
 
-    @CsvBindByPosition(position = 1)
+    @CsvBindByName
+    //@CsvNumber(value = "#,##")
     private double amount;
 
+    //  TODO Currency https://docs.oracle.com/javase/8/docs/api/java/util/Currency.html?is-external=true
+    @CsvBindByName
     private String currency;
 
-    @CsvBindByPosition(position = 2)
+    @CsvBindByName
     private String comment;
 
     // TODO перенести инициализацию ?
