@@ -9,4 +9,6 @@ import java.util.List;
 public interface OrdersPackAdapter {
 
     List<Order> read(JsonReader jsonReader) throws IOException;
+
+    void setFileName(String fileName);
 }

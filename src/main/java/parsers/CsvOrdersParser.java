@@ -32,6 +32,11 @@ public class CsvOrdersParser implements OrdersParser {
         if(reader != null){
             CSVReader csvReader = new CSVReader(reader);
             List<Order> orders = buildOrdersList(csvReader);
+            for(int index=0; index< orders.size(); index++){
+                Order order = orders.get(index);
+                order.setFileName(fileName);
+                order.setLine(index+1);
+            }
             ordersPack.add(orders);
         }
     }

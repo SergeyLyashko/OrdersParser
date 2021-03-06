@@ -35,6 +35,7 @@ public class JsonOrdersParser implements OrdersParser {
 
     @Override
     public void parse(String fileName) {
+        ordersPackAdapter.setFileName(fileName);
         Type orderListType = new TypeToken<List<Order>>() {}.getType();
         Gson gson = new GsonBuilder()
                 .registerTypeAdapter(OrdersPack.class, jsonDeserializer)

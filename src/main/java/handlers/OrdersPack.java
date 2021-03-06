@@ -6,7 +6,8 @@ public interface OrdersPack {
 
     void add(List<Order> ordersPack);
 
-    List<Order> getOrdersPack();
+    //List<Order> getOrdersPack();
 
     void print();
+
 }

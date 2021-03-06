@@ -6,7 +6,7 @@ import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 import com.google.gson.reflect.TypeToken;
 import org.springframework.stereotype.Service;
-
+/*
 import java.lang.reflect.Type;
 // TODO ????? DEL ??
 @Service("jsonSerializer")
@@ -20,3 +20,4 @@ public class OrdersPackSerializerWithTypeAdapter implements JsonSerializer<Order
         return newJsonObject;
     }
 }
+*/

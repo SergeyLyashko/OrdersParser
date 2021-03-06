@@ -18,7 +18,7 @@ public class OrderImpl implements Order {
     public OrderImpl(){}
 
     @CsvBindByName
-    private int orderId;
+    private int id;
 
     @CsvBindByName
     @CsvNumber(value = "#,##")
@@ -30,18 +30,18 @@ public class OrderImpl implements Order {
     @CsvBindByName
     private String comment;
 
-    private String fileName;
+    private String filename;
     private int line;
     private String result;
 
     @Override
     public void setOrderId(int orderId){
-        this.orderId = orderId;
+        this.id = orderId;
     }
 
     @Override
     public int getOrderId(){
-        return orderId;
+        return id;
     }
 
     @Override
@@ -76,12 +76,12 @@ public class OrderImpl implements Order {
 
     @Override
     public void setFileName(String fileName){
-        this.fileName = fileName;
+        this.filename = fileName;
     }
 
     @Override
     public String getFileName(){
-        return fileName;
+        return filename;
     }
 
     @Override

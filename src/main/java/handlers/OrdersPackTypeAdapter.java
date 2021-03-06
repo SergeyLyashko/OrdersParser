@@ -19,6 +19,7 @@ import java.util.List;
 public class OrdersPackTypeAdapter extends TypeAdapter<List<Order>> implements OrdersPackAdapter, ApplicationContextAware {
 
     private ApplicationContext context;
+    private String fileName;
 
     // TODO ????
     @Override
@@ -50,7 +51,18 @@ public class OrdersPackTypeAdapter extends TypeAdapter<List<Order>> implements O
             }
         }
         jsonReader.endArray();
+        //orders.forEach(order -> order.setFileName(fileName));
+        for(int index=0; index< orders.size(); index++){
+            Order order = orders.get(index);
+            order.setFileName(fileName);
+            order.setLine(index+1);
+        }
         return orders;
+    }
+
+    @Override
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
     }
 
     private Order createOrdersPack(JsonReader jsonReader) throws IOException {

@@ -16,11 +16,11 @@ import java.util.List;
 public class OrdersPackImpl implements OrdersPack {
 
     private final List<Order> pack = new ArrayList<>();
-
+    /*
     @Override
     public List<Order> getOrdersPack(){
         return pack;
-    }
+    }*/
 
     @Override
     public void print(){
