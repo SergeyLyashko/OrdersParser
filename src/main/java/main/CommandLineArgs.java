@@ -1,67 +1,24 @@
 package main;
 
-import org.springframework.beans.BeansException;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import csvparser.CsvOrdersParser;
-import jsonparser.JsonOrdersParser;
 import picocli.CommandLine;
 
-import java.util.Arrays;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 @Service("commandLine")
-class CommandLineArgs implements Runnable, ApplicationContextAware {
-
-    private static final String FILE_EXTENSION_REGEX = "[\\S]+[.]([\\S]+)";
-    private static final Pattern FILE_EXTENSION = Pattern.compile(FILE_EXTENSION_REGEX);
+class CommandLineArgs implements Runnable {
 
     @CommandLine.Parameters(index = "0..*")
     private String[] files;
-    private ApplicationContext context;
+
+    private ExecutorParse executorParse;
+
+    @Autowired
+    public void setExecutorParse(ExecutorParse executorParse){
+        this.executorParse = executorParse;
+    }
 
     @Override
     public void run() {
-        Arrays.stream(files).forEach(file ->{
-            try {
-                OrdersParser ordersParser = fileParser(file);
-                new Thread(ordersParser).start();
-            } catch (NoSuchFieldException e) {
-                e.printStackTrace();
-            }
-        });
-    }
-
-    private OrdersParser fileParser(String fileName) throws NoSuchFieldException {
-        String fileExtension = fileExtensionParser(fileName);
-        switch (fileExtension){
-            case "json":
-                OrdersParser jsonOrdersParser = context.getBean("jsonOrdersParser", JsonOrdersParser.class);
-                jsonOrdersParser.setFile(fileName);
-                return jsonOrdersParser;
-            case "csv":
-                OrdersParser csvOrdersParser = context.getBean("csvOrdersParser", CsvOrdersParser.class);
-                csvOrdersParser.setFile(fileName);
-                return csvOrdersParser;
-            default:
-                throw new NoSuchFieldException();
-
-        }
-    }
-
-    private String fileExtensionParser(String fileName){
-        String extension = null;
-        Matcher matcher = FILE_EXTENSION.matcher(fileName);
-        while (matcher.find()){
-            extension = matcher.group(1);
-        }
-        return extension;
-    }
-
-    @Override
-    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-        this.context = applicationContext;
+        executorParse.execute(files);
     }
 }

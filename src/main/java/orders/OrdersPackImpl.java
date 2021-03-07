@@ -17,7 +17,9 @@ class OrdersPackImpl implements OrdersPack {
 
     @Override
     public void print(){
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        Gson gson = new GsonBuilder()
+                .setPrettyPrinting()
+                .create();
         System.out.println(gson.toJson(this));
     }
 
