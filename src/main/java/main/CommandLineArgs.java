@@ -1,12 +1,11 @@
 package main;
 
-import jsonhandlers.OrdersParser;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Service;
-import parsers.CsvOrdersParser;
-import parsers.JsonOrdersParser;
+import csvparser.CsvOrdersParser;
+import jsonparser.JsonOrdersParser;
 import picocli.CommandLine;
 
 import java.util.Arrays;
@@ -14,7 +13,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Service("commandLine")
-public class CommandLineArgs implements Runnable, ApplicationContextAware {
+class CommandLineArgs implements Runnable, ApplicationContextAware {
 
     private static final String FILE_EXTENSION_REGEX = "[\\S]+[.]([\\S]+)";
     private static final Pattern FILE_EXTENSION = Pattern.compile(FILE_EXTENSION_REGEX);
@@ -28,7 +27,7 @@ public class CommandLineArgs implements Runnable, ApplicationContextAware {
         Arrays.stream(files).forEach(file ->{
             try {
                 OrdersParser ordersParser = fileParser(file);
-                ordersParser.parse(file);
+                new Thread(ordersParser).start();
             } catch (NoSuchFieldException e) {
                 e.printStackTrace();
             }
@@ -39,9 +38,13 @@ public class CommandLineArgs implements Runnable, ApplicationContextAware {
         String fileExtension = fileExtensionParser(fileName);
         switch (fileExtension){
             case "json":
-                return context.getBean("jsonOrdersParser", JsonOrdersParser.class);
+                OrdersParser jsonOrdersParser = context.getBean("jsonOrdersParser", JsonOrdersParser.class);
+                jsonOrdersParser.setFile(fileName);
+                return jsonOrdersParser;
             case "csv":
-                return context.getBean("csvOrdersParser", CsvOrdersParser.class);
+                OrdersParser csvOrdersParser = context.getBean("csvOrdersParser", CsvOrdersParser.class);
+                csvOrdersParser.setFile(fileName);
+                return csvOrdersParser;
             default:
                 throw new NoSuchFieldException();
 

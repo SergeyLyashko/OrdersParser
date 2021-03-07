@@ -1,4 +1,4 @@
-package jsonhandlers;
+package orders;
 
 import java.util.Currency;
 

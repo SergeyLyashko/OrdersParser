@@ -2,25 +2,18 @@ package orders;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import jsonhandlers.Order;
-import jsonhandlers.OrdersPack;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * Pack of orders from json
  */
 @Component("ordersPack")
-public class OrdersPackImpl implements OrdersPack {
+class OrdersPackImpl implements OrdersPack {
 
-    private final List<Order> pack = new ArrayList<>();
-    /*
-    @Override
-    public List<Order> getOrdersPack(){
-        return pack;
-    }*/
+    private final List<Order> pack = new CopyOnWriteArrayList<>();
 
     @Override
     public void print(){

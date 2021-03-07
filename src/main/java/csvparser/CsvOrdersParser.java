@@ -1,9 +1,9 @@
-package parsers;
+package csvparser;
 
 import com.opencsv.CSVParser;
-import jsonhandlers.Order;
-import jsonhandlers.OrdersPack;
-import jsonhandlers.OrdersParser;
+import orders.Order;
+import orders.OrdersPack;
+import main.OrdersParser;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -21,11 +21,12 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Stream;
 
 @Service("csvOrdersParser")
-public class CsvOrdersParser implements OrdersParser, ApplicationContextAware {
+public class CsvOrdersParser implements Runnable, OrdersParser, ApplicationContextAware {
 
     private ApplicationContext context;
     private OrdersPack ordersPack;
     private CSVParser csvParser;
+    private String fileName;
 
     @Autowired
     public void setOrdersPack(OrdersPack ordersPack){
@@ -38,7 +39,18 @@ public class CsvOrdersParser implements OrdersParser, ApplicationContextAware {
     }
 
     @Override
-    public void parse(String fileName) {
+    public void setFile(String fileName) {
+        this.fileName = fileName;
+    }
+
+    @Override
+    public void run() {
+        // TODO TEST
+        System.out.println(Thread.currentThread().getName());
+        parse(fileName);
+    }
+
+    private void parse(String fileName) {
         List<Order> orders = readFile(fileName);
         ordersPack.add(orders);
     }

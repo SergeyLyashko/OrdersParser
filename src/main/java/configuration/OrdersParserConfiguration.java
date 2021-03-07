@@ -5,7 +5,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
-@ComponentScan(basePackages = {"jsonhandlers", "orders", "parsers", "main"})
+@ComponentScan(basePackages = {"jsonparser", "orders", "csvparser", "main"})
 @Configuration
 public class OrdersParserConfiguration {
 

@@ -1,14 +1,14 @@
-package jsonhandlers;
+package jsonparser;
 
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
+import orders.Order;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Service;
-import parsers.OrdersPackAdapter;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -16,7 +16,7 @@ import java.util.Currency;
 import java.util.List;
 
 @Service("ordersPackAdapter")
-public class OrdersPackTypeAdapter extends TypeAdapter<List<Order>> implements OrdersPackAdapter, ApplicationContextAware {
+class OrdersPackTypeAdapter extends TypeAdapter<List<Order>> implements OrdersPackAdapter, ApplicationContextAware {
 
     private ApplicationContext context;
     private String fileName;

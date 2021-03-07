@@ -1,7 +1,9 @@
-package jsonhandlers;
+package jsonparser;
 
 import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
+import orders.Order;
+import orders.OrdersPack;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -9,7 +11,7 @@ import java.lang.reflect.Type;
 import java.util.List;
 
 @Service("jsonDeserializer")
-public class OrdersPackDeserializerWithTypeAdapter implements JsonDeserializer<OrdersPack> {
+class OrdersPackDeserializerWithTypeAdapter implements JsonDeserializer<OrdersPack> {
 
     private OrdersPack ordersPack;
 

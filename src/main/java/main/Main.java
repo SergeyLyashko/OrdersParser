@@ -1,7 +1,7 @@
 package main;
 
 import configuration.OrdersParserConfiguration;
-import jsonhandlers.OrdersPack;
+import orders.OrdersPack;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import picocli.CommandLine;

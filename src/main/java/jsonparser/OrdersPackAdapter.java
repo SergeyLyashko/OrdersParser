@@ -1,7 +1,7 @@
-package parsers;
+package jsonparser;
 
 import com.google.gson.stream.JsonReader;
-import jsonhandlers.Order;
+import orders.Order;
 
 import java.io.IOException;
 import java.util.List;

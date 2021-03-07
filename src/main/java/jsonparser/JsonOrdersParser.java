@@ -1,12 +1,12 @@
-package parsers;
+package jsonparser;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.reflect.TypeToken;
-import jsonhandlers.Order;
-import jsonhandlers.OrdersPack;
-import jsonhandlers.OrdersParser;
+import main.OrdersParser;
+import orders.Order;
+import orders.OrdersPack;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,10 +18,11 @@ import java.nio.file.Paths;
 import java.util.List;
 
 @Service("jsonOrdersParser")
-public class JsonOrdersParser implements OrdersParser {
+public class JsonOrdersParser implements Runnable, OrdersParser {
 
     private OrdersPackAdapter ordersPackAdapter;
     private JsonDeserializer<OrdersPack> jsonDeserializer;
+    private String fileName;
 
     @Autowired
     public void setOrdersPackAdapter(OrdersPackAdapter ordersPackAdapter){
@@ -34,7 +35,13 @@ public class JsonOrdersParser implements OrdersParser {
     }
 
     @Override
-    public void parse(String fileName) {
+    public void run() {
+        // TODO TEST
+        System.out.println(Thread.currentThread().getName());
+        parse(fileName);
+    }
+
+    private void parse(String fileName) {
         ordersPackAdapter.setFileName(fileName);
         Type orderListType = new TypeToken<List<Order>>() {}.getType();
         Gson gson = new GsonBuilder()
@@ -45,6 +52,11 @@ public class JsonOrdersParser implements OrdersParser {
         if(reader != null) {
             gson.fromJson(reader, OrdersPack.class);
         }
+    }
+
+    @Override
+    public void setFile(String fileName) {
+        this.fileName = fileName;
     }
 
     private BufferedReader reader(String fileName) {

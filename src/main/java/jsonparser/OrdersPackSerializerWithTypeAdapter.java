@@ -1,4 +1,4 @@
-package jsonhandlers;
+package jsonparser;
 
 /*
 import java.lang.reflect.Type;

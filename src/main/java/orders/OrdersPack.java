@@ -1,4 +1,6 @@
-package jsonhandlers;
+package orders;
+
+import orders.Order;
 
 import java.util.List;
 

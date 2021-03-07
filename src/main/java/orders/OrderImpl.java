@@ -1,6 +1,5 @@
 package orders;
 
-import jsonhandlers.Order;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -11,7 +10,7 @@ import java.util.Currency;
  */
 @Component("order")
 @Scope("prototype")
-public class OrderImpl implements Order {
+class OrderImpl implements Order {
 
     private int id;
     private int line;
