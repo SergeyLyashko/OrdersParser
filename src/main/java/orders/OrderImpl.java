@@ -1,6 +1,6 @@
 package orders;
 
-import handlers.Order;
+import jsonhandlers.Order;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -14,11 +14,11 @@ import java.util.Currency;
 public class OrderImpl implements Order {
 
     private int id;
+    private int line;
     private double amount;
     private Currency currency;
     private String comment;
     private String filename;
-    private int line;
     private String result;
 
     public OrderImpl(){}

@@ -1,4 +1,4 @@
-package handlers;
+package jsonhandlers;
 
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
@@ -43,20 +43,18 @@ public class OrdersPackTypeAdapter extends TypeAdapter<List<Order>> implements O
     public List<Order> read(JsonReader jsonReader) throws IOException {
         List<Order> orders = new ArrayList<>();
         jsonReader.beginArray();
+        int lineCount = 1;
         while (jsonReader.hasNext()){
             if(jsonReader.peek().equals(JsonToken.BEGIN_OBJECT)){
-                orders.add(createOrdersPack(jsonReader));
+                Order order = createOrdersPack(jsonReader);
+                order.setFileName(fileName);
+                order.setLine(lineCount++);
+                orders.add(order);
             }else{
                 jsonReader.skipValue();
             }
         }
         jsonReader.endArray();
-        //orders.forEach(order -> order.setFileName(fileName));
-        for(int index=0; index< orders.size(); index++){
-            Order order = orders.get(index);
-            order.setFileName(fileName);
-            order.setLine(index+1);
-        }
         return orders;
     }
 
@@ -67,6 +65,7 @@ public class OrdersPackTypeAdapter extends TypeAdapter<List<Order>> implements O
 
     private Order createOrdersPack(JsonReader jsonReader) throws IOException {
         Order order = context.getBean("order", Order.class);
+        order.setResult("OK");
         jsonReader.beginObject();
         while (jsonReader.hasNext()){
             switch (jsonReader.nextName()){
@@ -74,10 +73,10 @@ public class OrdersPackTypeAdapter extends TypeAdapter<List<Order>> implements O
                     order.setOrderId(jsonReader.nextInt());
                     break;
                 case "amount":
-                    order.setAmount(jsonReader.nextDouble());
+                    parseAmount(order, jsonReader);
                     break;
                 case "currency":
-                    order.setCurrency(Currency.getInstance(jsonReader.nextString()));
+                    parseCurrency(order, jsonReader);
                     break;
                 case "comment":
                     order.setComment(jsonReader.nextString());
@@ -89,6 +88,22 @@ public class OrdersPackTypeAdapter extends TypeAdapter<List<Order>> implements O
         }
         jsonReader.endObject();
         return order;
+    }
+
+    private void parseAmount(Order order, JsonReader jsonReader) {
+        try {
+            order.setAmount(Double.parseDouble(jsonReader.nextString()));
+        }catch (NumberFormatException | IOException ex){
+            order.setResult("ERROR: the amount is not readable");
+        }
+    }
+
+    private void parseCurrency(Order order, JsonReader jsonReader) {
+        try{
+            order.setCurrency(Currency.getInstance(jsonReader.nextString()));
+        }catch (IllegalArgumentException | IOException ex){
+            order.setResult("ERROR: the currency not defined");
+        }
     }
 
     @Override

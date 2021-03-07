@@ -4,9 +4,9 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.reflect.TypeToken;
-import handlers.Order;
-import handlers.OrdersPack;
-import handlers.OrdersParser;
+import jsonhandlers.Order;
+import jsonhandlers.OrdersPack;
+import jsonhandlers.OrdersParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -47,11 +47,11 @@ public class JsonOrdersParser implements OrdersParser {
         }
     }
 
-    private BufferedReader reader(String filePath) {
+    private BufferedReader reader(String fileName) {
         try {
-            return Files.newBufferedReader(Paths.get(filePath), StandardCharsets.UTF_8);
+            return Files.newBufferedReader(Paths.get(fileName), StandardCharsets.UTF_8);
         } catch (IOException e) {
-            e.printStackTrace();
+            System.err.println("File "+fileName+" not found and will not be included for parsing.");
         }
         return null;
     }

@@ -1,4 +1,4 @@
-package handlers;
+package jsonhandlers;
 
 public interface OrdersParser {
 

@@ -1,6 +1,6 @@
 package main;
 
-import handlers.OrdersParser;
+import jsonhandlers.OrdersParser;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
@@ -14,7 +14,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Service("commandLine")
-public class CommandLineFileNameArgs implements Runnable, ApplicationContextAware {
+public class CommandLineArgs implements Runnable, ApplicationContextAware {
 
     private static final String FILE_EXTENSION_REGEX = "[\\S]+[.]([\\S]+)";
     private static final Pattern FILE_EXTENSION = Pattern.compile(FILE_EXTENSION_REGEX);

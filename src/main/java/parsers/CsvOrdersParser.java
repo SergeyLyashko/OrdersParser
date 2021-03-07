@@ -1,9 +1,9 @@
 package parsers;
 
 import com.opencsv.CSVParser;
-import handlers.Order;
-import handlers.OrdersPack;
-import handlers.OrdersParser;
+import jsonhandlers.Order;
+import jsonhandlers.OrdersPack;
+import jsonhandlers.OrdersParser;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
