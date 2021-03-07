@@ -1,7 +1,5 @@
 package orders;
 
-import com.opencsv.bean.CsvBindByName;
-import com.opencsv.bean.CsvNumber;
 import handlers.Order;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -15,24 +13,15 @@ import java.util.Currency;
 @Scope("prototype")
 public class OrderImpl implements Order {
 
-    public OrderImpl(){}
-
-    @CsvBindByName
     private int id;
-
-    @CsvBindByName
-    @CsvNumber(value = "#,##")
     private double amount;
-
-    @CsvBindByName
     private Currency currency;
-
-    @CsvBindByName
     private String comment;
-
     private String filename;
     private int line;
     private String result;
+
+    public OrderImpl(){}
 
     @Override
     public void setOrderId(int orderId){

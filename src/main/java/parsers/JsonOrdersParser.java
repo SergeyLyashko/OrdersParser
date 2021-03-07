@@ -17,7 +17,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
 
-@Service("jsonParser")
+@Service("jsonOrdersParser")
 public class JsonOrdersParser implements OrdersParser {
 
     private OrdersPackAdapter ordersPackAdapter;

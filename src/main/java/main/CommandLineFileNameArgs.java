@@ -39,9 +39,9 @@ public class CommandLineFileNameArgs implements Runnable, ApplicationContextAwar
         String fileExtension = fileExtensionParser(fileName);
         switch (fileExtension){
             case "json":
-                return context.getBean("jsonParser", JsonOrdersParser.class);
+                return context.getBean("jsonOrdersParser", JsonOrdersParser.class);
             case "csv":
-                return context.getBean("csvParser", CsvOrdersParser.class);
+                return context.getBean("csvOrdersParser", CsvOrdersParser.class);
             default:
                 throw new NoSuchFieldException();
 
