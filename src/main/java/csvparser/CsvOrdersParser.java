@@ -18,6 +18,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Currency;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Stream;
 
@@ -29,6 +30,7 @@ public class CsvOrdersParser implements Runnable, OrdersParser, ApplicationConte
     private OrdersPack ordersPack;
     private CSVParser csvParser;
     private String fileName;
+    private CountDownLatch countDownLatch;
 
     @Autowired
     public void setOrdersPack(OrdersPack ordersPack){
@@ -46,11 +48,18 @@ public class CsvOrdersParser implements Runnable, OrdersParser, ApplicationConte
     }
 
     @Override
+    public void setCountDownLatch(CountDownLatch countDownLatch) {
+        this.countDownLatch = countDownLatch;
+    }
+
+    @Override
     public void run() {
         // TODO TEST
         Thread.currentThread().setName("csv-parser");
         System.out.println(Thread.currentThread().getName());
         parse(fileName);
+        countDownLatch.countDown();
+        System.out.println("count down: "+countDownLatch.getCount());
     }
 
     private void parse(String fileName) {

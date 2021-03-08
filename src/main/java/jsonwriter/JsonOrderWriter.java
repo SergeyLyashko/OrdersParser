@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Type;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
 
 @Service("jsonOrderWriter")
 public class JsonOrderWriter implements Runnable, ApplicationContextAware {
@@ -22,6 +23,7 @@ public class JsonOrderWriter implements Runnable, ApplicationContextAware {
     private JsonSerializer<OrdersPack> jsonSerializer;
     private OrdersPack ordersPack;
     private ApplicationContext context;
+    private CountDownLatch countDownLatch;
 
     @Autowired
     public void setJsonSerializer(JsonSerializer<OrdersPack> jsonSerializer){
@@ -42,6 +44,14 @@ public class JsonOrderWriter implements Runnable, ApplicationContextAware {
     public void run() {
         Thread.currentThread().setName("writer");
         System.out.println(Thread.currentThread().getName());
+        try {
+            System.out.println("writer await");
+            countDownLatch.await();
+            System.out.println("writer start! count down: "+countDownLatch.getCount());
+        } catch (InterruptedException e) {
+            // TODO обработать
+            e.printStackTrace();
+        }
         print();
     }
 
@@ -54,5 +64,9 @@ public class JsonOrderWriter implements Runnable, ApplicationContextAware {
                 .registerTypeAdapter(orderListType, ordersPackAdapter)
                 .create();
         System.out.println(gson.toJson(ordersPack));
+    }
+
+    public void setCountDownLatch(CountDownLatch countDownLatch) {
+        this.countDownLatch = countDownLatch;
     }
 }

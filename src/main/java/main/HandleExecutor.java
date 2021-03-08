@@ -39,13 +39,12 @@ public class HandleExecutor {
     }
 
     public void execute(String[] commandLineFiles) {
-        int filesCount = commandLineFiles.length;
-        countDownLatch = new CountDownLatch(filesCount);
         addParsersPool(commandLineFiles);
+        setCountDownLatch();
         parsersPool.forEach(parseService::execute);
-        parseService.shutdown();
         writer.execute(orderWriter);
         writer.shutdown();
+        parseService.shutdown();
     }
 
     private void addParsersPool(String[] files){
@@ -58,5 +57,12 @@ public class HandleExecutor {
                 System.err.println("Not found methods for parsing this "+file);
             }
         });
+    }
+
+    private void setCountDownLatch(){
+        int filesCount = parsersPool.size();
+        countDownLatch = new CountDownLatch(filesCount);
+        parsersPool.forEach(parser -> parser.setCountDownLatch(countDownLatch));
+        orderWriter.setCountDownLatch(countDownLatch);
     }
 }

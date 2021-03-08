@@ -20,6 +20,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
 
 @Service("jsonOrdersParser")
 @Scope("prototype")
@@ -28,6 +29,7 @@ public class JsonOrdersParser implements Runnable, OrdersParser, ApplicationCont
     private JsonDeserializer<OrdersPack> jsonDeserializer;
     private String fileName;
     private ApplicationContext context;
+    private CountDownLatch countDownLatch;
 
     @Autowired
     public void setJsonDeserializer(JsonDeserializer<OrdersPack> jsonDeserializer){
@@ -45,11 +47,18 @@ public class JsonOrdersParser implements Runnable, OrdersParser, ApplicationCont
     }
 
     @Override
+    public void setCountDownLatch(CountDownLatch countDownLatch) {
+        this.countDownLatch = countDownLatch;
+    }
+
+    @Override
     public void run() {
         // TODO TEST
         Thread.currentThread().setName("json-parser");
         System.out.println(Thread.currentThread().getName());
         parse(fileName);
+        countDownLatch.countDown();
+        System.out.println("count down: "+countDownLatch.getCount());
     }
 
     private void parse(String fileName) {
