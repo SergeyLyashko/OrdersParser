@@ -12,7 +12,7 @@ public class Main {
         ApplicationContext context = new AnnotationConfigApplicationContext(OrdersParserConfiguration.class);
         CommandLineArgs commandLine = context.getBean("commandLine", CommandLineArgs.class);
         // TODO !!! убрать тестовую строку файлов
-        new CommandLine(commandLine).execute("orders.json", "orders.csv");
+        new CommandLine(commandLine).execute("orders1.json", "orders2.csv", "orders2.json", "orders1.csv");
         OrdersPack ordersPack = context.getBean("ordersPack", OrdersPack.class);
         ordersPack.print();
     }

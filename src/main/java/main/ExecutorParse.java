@@ -43,6 +43,7 @@ public class ExecutorParse implements ApplicationContextAware {
         Arrays.stream(files).forEach(file -> {
             try {
                 OrdersParser ordersParser = fileParser(file);
+                ordersParser.setFile(file);
                 parsersPool.add(ordersParser);
             } catch (NoSuchFieldException e) {
                 System.err.println("Not found methods for parsing this extension ."+fileExtensionParser(file));
@@ -54,16 +55,11 @@ public class ExecutorParse implements ApplicationContextAware {
         String fileExtension = fileExtensionParser(fileName);
         switch (fileExtension){
             case "json":
-                OrdersParser jsonOrdersParser = context.getBean("jsonOrdersParser", JsonOrdersParser.class);
-                jsonOrdersParser.setFile(fileName);
-                return jsonOrdersParser;
+                return context.getBean("jsonOrdersParser", JsonOrdersParser.class);
             case "csv":
-                OrdersParser csvOrdersParser = context.getBean("csvOrdersParser", CsvOrdersParser.class);
-                csvOrdersParser.setFile(fileName);
-                return csvOrdersParser;
+                return context.getBean("csvOrdersParser", CsvOrdersParser.class);
             default:
                 throw new NoSuchFieldException();
-
         }
     }
 
