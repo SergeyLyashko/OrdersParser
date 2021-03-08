@@ -23,22 +23,20 @@ class OrdersPackTypeAdapter extends TypeAdapter<List<Order>> implements OrdersPa
     private ApplicationContext context;
     private String fileName;
 
-    // TODO ????
     @Override
     public void write(JsonWriter jsonWriter, List<Order> orders) throws IOException {
-        /*jsonWriter.beginArray();
+        jsonWriter.beginArray();
         for(Order order: orders){
             jsonWriter.beginObject();
-            jsonWriter.name("orderId").value(order.getOrderId());
+            jsonWriter.name("id").value(order.getOrderId());
             jsonWriter.name("amount").value(order.getAmount());
             jsonWriter.name("comment").value(order.getComment());
-            // TODO
             jsonWriter.name("filename").value(order.getFileName());
             jsonWriter.name("line").value(order.getLine());
             jsonWriter.name("result").value(order.getResult());
             jsonWriter.endObject();
         }
-        jsonWriter.endArray();*/
+        jsonWriter.endArray();
     }
 
     @Override

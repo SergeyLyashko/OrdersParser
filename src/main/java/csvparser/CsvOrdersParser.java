@@ -48,6 +48,7 @@ public class CsvOrdersParser implements Runnable, OrdersParser, ApplicationConte
     @Override
     public void run() {
         // TODO TEST
+        Thread.currentThread().setName("csv-parser");
         System.out.println(Thread.currentThread().getName());
         parse(fileName);
     }

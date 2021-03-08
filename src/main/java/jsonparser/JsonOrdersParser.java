@@ -47,6 +47,7 @@ public class JsonOrdersParser implements Runnable, OrdersParser, ApplicationCont
     @Override
     public void run() {
         // TODO TEST
+        Thread.currentThread().setName("json-parser");
         System.out.println(Thread.currentThread().getName());
         parse(fileName);
     }
@@ -59,13 +60,13 @@ public class JsonOrdersParser implements Runnable, OrdersParser, ApplicationCont
                 .registerTypeAdapter(OrdersPack.class, jsonDeserializer)
                 .registerTypeAdapter(orderListType, ordersPackAdapter)
                 .create();
-        BufferedReader reader = reader(fileName);
+        BufferedReader reader = fileReader(fileName);
         if(reader != null) {
             gson.fromJson(reader, OrdersPack.class);
         }
     }
 
-    private BufferedReader reader(String fileName) {
+    private BufferedReader fileReader(String fileName) {
         try {
             return Files.newBufferedReader(Paths.get(fileName), StandardCharsets.UTF_8);
         } catch (IOException e) {

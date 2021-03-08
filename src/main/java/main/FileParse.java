@@ -2,7 +2,9 @@ package main;
 
 import csvparser.CsvOrdersParser;
 import jsonparser.JsonOrdersParser;
+import jsonwriter.JsonOrderWriter;
 import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Service;
@@ -10,33 +12,46 @@ import org.springframework.stereotype.Service;
 import java.util.Arrays;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Service("fileParser")
-public class ExecutorParse implements ApplicationContextAware {
+public class FileParse implements ApplicationContextAware {
 
     private static final String FILE_EXTENSION_REGEX = "[\\S]+[.]([\\S]+)";
     private static final Pattern FILE_EXTENSION = Pattern.compile(FILE_EXTENSION_REGEX);
-
+    // защелка
+    private CountDownLatch countDownLatch;
     // запуск потока записи в файл
     private final ExecutorService writer;
+    private final ExecutorService executorService;
     // очередь читателей файлов
     private final Queue<OrdersParser> parsersPool;
     private ApplicationContext context;
+    private JsonOrderWriter orderWriter;
 
-    public ExecutorParse(){
-        parsersPool = new ConcurrentLinkedQueue<>();
-        writer = Executors.newSingleThreadExecutor();
+    @Autowired
+    public void setOrderWriter(JsonOrderWriter orderWriter){
+        this.orderWriter = orderWriter;
     }
 
-    public void execute(String[] files) {
-        ExecutorService executorService = Executors.newFixedThreadPool(files.length);
-        addParsersPool(files);
+    public FileParse(){
+        parsersPool = new ConcurrentLinkedQueue<>();
+        writer = Executors.newSingleThreadExecutor();
+        executorService = Executors.newCachedThreadPool();
+    }
+
+    public void execute(String[] commandLineFiles) {
+        int filesCount = commandLineFiles.length;
+        countDownLatch = new CountDownLatch(filesCount);
+        addParsersPool(commandLineFiles);
         parsersPool.forEach(executorService::execute);
         executorService.shutdown();
+        writer.execute(orderWriter);
+        writer.shutdown();
     }
 
     private void addParsersPool(String[] files){

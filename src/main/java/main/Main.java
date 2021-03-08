@@ -1,7 +1,6 @@
 package main;
 
 import configuration.OrdersParserConfiguration;
-import orders.OrdersPack;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import picocli.CommandLine;
@@ -13,7 +12,5 @@ public class Main {
         CommandLineArgs commandLine = context.getBean("commandLine", CommandLineArgs.class);
         // TODO !!! убрать тестовую строку файлов
         new CommandLine(commandLine).execute("orders1.json", "orders2.csv", "orders2.json", "orders1.csv");
-        OrdersPack ordersPack = context.getBean("ordersPack", OrdersPack.class);
-        ordersPack.print();
     }
 }
