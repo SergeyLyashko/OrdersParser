@@ -1,10 +1,10 @@
-package jsonwriter;
+package jsonIO;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSerializer;
 import com.google.gson.reflect.TypeToken;
-import jsonparser.OrdersPackAdapter;
+import executors.OrdersIO;
 import orders.Order;
 import orders.OrdersPack;
 import org.springframework.beans.BeansException;
@@ -17,8 +17,8 @@ import java.lang.reflect.Type;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 
-@Service("jsonOrderWriter")
-public class JsonOrderWriter implements Runnable, ApplicationContextAware {
+@Service("ordersWriter")
+class JsonOrdersPackWriter implements OrdersIO, ApplicationContextAware {
 
     private JsonSerializer<OrdersPack> jsonSerializer;
     private OrdersPack ordersPack;
@@ -64,6 +64,11 @@ public class JsonOrderWriter implements Runnable, ApplicationContextAware {
                 .registerTypeAdapter(orderListType, ordersPackAdapter)
                 .create();
         System.out.println(gson.toJson(ordersPack));
+    }
+
+    @Override
+    public void setFile(String fileName) {
+        // set out file
     }
 
     public void setCountDownLatch(CountDownLatch countDownLatch) {

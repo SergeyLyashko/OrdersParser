@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 import java.util.Currency;
 
 /**
- * Order from json-file
+ * Order
  */
 @Component("order")
 @Scope("prototype")

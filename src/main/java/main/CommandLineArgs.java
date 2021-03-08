@@ -9,15 +9,15 @@ class CommandLineArgs implements Runnable {
 
     @CommandLine.Parameters(index = "0..*")
     private String[] files;
-    private HandleExecutor handleExecutor;
+    private ExecutorsParsers executorsParsers;
 
     @Autowired
-    public void setHandleExecutor(HandleExecutor handleExecutor){
-        this.handleExecutor = handleExecutor;
+    public void setExecutorsParsers(ExecutorsParsers executorsParsers){
+        this.executorsParsers = executorsParsers;
     }
 
     @Override
     public void run() {
-        handleExecutor.execute(files);
+        executorsParsers.execute(files);
     }
 }

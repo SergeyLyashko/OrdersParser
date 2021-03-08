@@ -1,7 +1,8 @@
-package main;
+package executors;
 
-import jsonwriter.JsonOrderWriter;
+import main.ExecutorsParsers;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
@@ -11,18 +12,18 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-@Service("handleExecutor")
-public class HandleExecutor {
+@Service("executorsParsers")
+class ExecutorsParsersImpl implements ExecutorsParsers {
 
     // защелка
     private CountDownLatch countDownLatch;
     private final ExecutorService writer;
     private final ExecutorService parseService;
-    private final Queue<OrdersParser> parsersPool;
-    private JsonOrderWriter orderWriter;
+    private final Queue<OrdersIO> parsersPool;
+    private OrdersIO orderWriter;
     private FileParser fileParser;
 
-    public HandleExecutor(){
+    public ExecutorsParsersImpl(){
         parsersPool = new ConcurrentLinkedQueue<>();
         writer = Executors.newSingleThreadExecutor();
         parseService = Executors.newCachedThreadPool();
@@ -34,7 +35,8 @@ public class HandleExecutor {
     }
 
     @Autowired
-    public void setOrderWriter(JsonOrderWriter orderWriter){
+    @Qualifier("ordersWriter")
+    public void setOrdersWriter(OrdersIO orderWriter){
         this.orderWriter = orderWriter;
     }
 
@@ -50,9 +52,9 @@ public class HandleExecutor {
     private void addParsersPool(String[] files){
         Arrays.stream(files).forEach(file -> {
             try {
-                OrdersParser ordersParser = fileParser.parse(file);
-                ordersParser.setFile(file);
-                parsersPool.add(ordersParser);
+                OrdersIO ordersIO = fileParser.parse(file);
+                ordersIO.setFile(file);
+                parsersPool.add(ordersIO);
             } catch (NoSuchFieldException e) {
                 System.err.println("Not found methods for parsing this "+file);
             }

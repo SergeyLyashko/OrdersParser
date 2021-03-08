@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
- * Pack of orders from json
+ * Pack of orders from files
  */
 @Component("ordersPack")
 class OrdersPackImpl implements OrdersPack {
@@ -14,12 +14,12 @@ class OrdersPackImpl implements OrdersPack {
     private final List<Order> pack = new CopyOnWriteArrayList<>();
 
     @Override
-    public void add(List<Order> ordersPack) {
-        pack.addAll(ordersPack);
+    public void add(List<Order> ordersList) {
+        pack.addAll(ordersList);
     }
 
     @Override
-    public List<Order> getOrdersPack() {
+    public List<Order> getOrdersList() {
         return pack;
     }
 }

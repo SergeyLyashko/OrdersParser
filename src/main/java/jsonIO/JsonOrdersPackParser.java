@@ -1,10 +1,10 @@
-package jsonparser;
+package jsonIO;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.reflect.TypeToken;
-import main.OrdersParser;
+import executors.OrdersIO;
 import orders.Order;
 import orders.OrdersPack;
 import org.springframework.beans.BeansException;
@@ -24,7 +24,7 @@ import java.util.concurrent.CountDownLatch;
 
 @Service("jsonOrdersParser")
 @Scope("prototype")
-public class JsonOrdersParser implements Runnable, OrdersParser, ApplicationContextAware {
+class JsonOrdersPackParser implements OrdersIO, ApplicationContextAware {
 
     private JsonDeserializer<OrdersPack> jsonDeserializer;
     private String fileName;
@@ -69,13 +69,13 @@ public class JsonOrdersParser implements Runnable, OrdersParser, ApplicationCont
                 .registerTypeAdapter(OrdersPack.class, jsonDeserializer)
                 .registerTypeAdapter(orderListType, ordersPackAdapter)
                 .create();
-        BufferedReader reader = fileReader(fileName);
+        BufferedReader reader = readFile(fileName);
         if(reader != null) {
             gson.fromJson(reader, OrdersPack.class);
         }
     }
 
-    private BufferedReader fileReader(String fileName) {
+    private BufferedReader readFile(String fileName) {
         try {
             return Files.newBufferedReader(Paths.get(fileName), StandardCharsets.UTF_8);
         } catch (IOException e) {

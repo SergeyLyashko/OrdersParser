@@ -1,8 +1,8 @@
-package main;
+package executors;
 
 import java.util.concurrent.CountDownLatch;
 
-public interface OrdersParser extends Runnable {
+public interface OrdersIO extends Runnable {
 
     void setFile(String fileName);
 

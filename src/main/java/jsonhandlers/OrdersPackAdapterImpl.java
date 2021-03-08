@@ -1,9 +1,10 @@
-package jsonparser;
+package jsonhandlers;
 
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
+import jsonIO.OrdersPackAdapter;
 import orders.Order;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
@@ -18,7 +19,7 @@ import java.util.List;
 
 @Service("ordersPackAdapter")
 @Scope("prototype")
-class OrdersPackTypeAdapter extends TypeAdapter<List<Order>> implements OrdersPackAdapter, ApplicationContextAware {
+class OrdersPackAdapterImpl extends TypeAdapter<List<Order>> implements OrdersPackAdapter, ApplicationContextAware {
 
     private ApplicationContext context;
     private String fileName;

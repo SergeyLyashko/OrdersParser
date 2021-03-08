@@ -3,7 +3,7 @@ package csvparser;
 import com.opencsv.CSVParser;
 import orders.Order;
 import orders.OrdersPack;
-import main.OrdersParser;
+import executors.OrdersIO;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -24,7 +24,7 @@ import java.util.stream.Stream;
 
 @Service("csvOrdersParser")
 @Scope("prototype")
-public class CsvOrdersParser implements Runnable, OrdersParser, ApplicationContextAware {
+class CsvOrdersPackParser implements OrdersIO, ApplicationContextAware {
 
     private ApplicationContext context;
     private OrdersPack ordersPack;
