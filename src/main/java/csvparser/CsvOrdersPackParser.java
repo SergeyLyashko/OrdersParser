@@ -80,7 +80,7 @@ class CsvOrdersPackParser implements OrdersIO, ApplicationContextAware {
                 orders.add(order);
             });
         } catch (IOException e) {
-            System.err.println("File "+fileName+" not found and will not be included for parsing.");
+            System.err.println("File "+fileName+" was not found and will not be included for parsing.");
         }
         return orders;
     }

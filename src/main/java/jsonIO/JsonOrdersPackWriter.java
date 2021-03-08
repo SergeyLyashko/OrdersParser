@@ -1,8 +1,6 @@
 package jsonIO;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonSerializer;
+import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
 import executors.OrdersIO;
 import orders.Order;
@@ -48,29 +46,36 @@ class JsonOrdersPackWriter implements OrdersIO, ApplicationContextAware {
             System.out.println("writer await");
             countDownLatch.await();
             System.out.println("writer start! count down: "+countDownLatch.getCount());
+            stdOutPrint();
         } catch (InterruptedException e) {
             // TODO обработать
             e.printStackTrace();
         }
-        print();
     }
 
-    private void print(){
+    /*
+    private Gson buildJson(){
         OrdersPackAdapter ordersPackAdapter = context.getBean("ordersPackAdapter", OrdersPackAdapter.class);
         Type orderListType = new TypeToken<List<Order>>() {}.getType();
-        Gson gson = new GsonBuilder()
+        return new GsonBuilder()
                 .setPrettyPrinting()
                 .registerTypeAdapter(OrdersPack.class, jsonSerializer)
                 .registerTypeAdapter(orderListType, ordersPackAdapter)
                 .create();
-        System.out.println(gson.toJson(ordersPack));
+    }*/
+
+    private void stdOutPrint(){
+        Type orderListType = new TypeToken<List<Order>>() {}.getType();
+        JsonElement element = new Gson().toJsonTree(ordersPack.getOrdersList(), orderListType);
+        element.getAsJsonArray().forEach(System.out::println);
     }
 
     @Override
     public void setFile(String fileName) {
-        // set out file
+        // set out file for write
     }
 
+    @Override
     public void setCountDownLatch(CountDownLatch countDownLatch) {
         this.countDownLatch = countDownLatch;
     }

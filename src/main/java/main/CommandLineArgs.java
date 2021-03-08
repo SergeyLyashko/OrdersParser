@@ -18,6 +18,8 @@ class CommandLineArgs implements Runnable {
 
     @Override
     public void run() {
-        executorsParsers.execute(files);
+        if(files.length != 0) {
+            executorsParsers.execute(files);
+        }
     }
 }

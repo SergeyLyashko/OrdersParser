@@ -79,7 +79,7 @@ class JsonOrdersPackParser implements OrdersIO, ApplicationContextAware {
         try {
             return Files.newBufferedReader(Paths.get(fileName), StandardCharsets.UTF_8);
         } catch (IOException e) {
-            System.err.println("File "+fileName+" not found and will not be included for parsing.");
+            System.err.println("File "+fileName+" was not found and will not be included for parsing.");
         }
         return null;
     }
