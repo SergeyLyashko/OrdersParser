@@ -7,4 +7,6 @@ public interface OrdersPack {
     void add(List<Order> ordersList);
 
     List<Order> getOrdersList();
+
+    void addOrder(Order order);
 }

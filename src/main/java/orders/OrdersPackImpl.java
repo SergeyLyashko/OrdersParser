@@ -22,4 +22,9 @@ class OrdersPackImpl implements OrdersPack {
     public List<Order> getOrdersList() {
         return pack;
     }
+
+    @Override
+    public void addOrder(Order order) {
+        pack.add(order);
+    }
 }

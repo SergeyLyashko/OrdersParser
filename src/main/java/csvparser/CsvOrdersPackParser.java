@@ -1,7 +1,6 @@
 package csvparser;
 
 import com.opencsv.CSVParser;
-import orders.Order;
 import orders.OrderBuilder;
 import orders.OrdersPack;
 import executors.OrdersIO;
@@ -18,9 +17,6 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Currency;
-import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Stream;
@@ -68,21 +64,16 @@ class CsvOrdersPackParser implements OrdersIO, ApplicationContextAware {
     }
 
     private void parse(String fileName) {
-        List<Order> orders = readFile(fileName);
-        ordersPack.add(orders);
+        readFile(fileName);
+        //ordersPack.add(orders);
     }
 
-    private List<Order> readFile(String fileName){
-        List<Order> orders = new ArrayList<>();
+    private void readFile(String fileName){
+        //List<Order> orders = new ArrayList<>();
         try(Stream<String> lines = Files.lines(Paths.get(fileName), StandardCharsets.UTF_8)){
             AtomicInteger index = new AtomicInteger(1);
             lines.skip(1).forEach(line -> {
-                Order order = parseLine(line);
-                if(order != null) {
-                    order.setFileName(fileName);
-                    order.setLine(index.getAndIncrement());
-                    orders.add(order);
-                }
+                parseLine(line, fileName, index.getAndIncrement());
                 /*
                 Order order = context.getBean("order", Order.class);
                 order.setResult("OK");
@@ -96,10 +87,10 @@ class CsvOrdersPackParser implements OrdersIO, ApplicationContextAware {
             // TODO убрать
             //System.err.println("File "+fileName+" was not found and will not be included for parsing.");
         }
-        return orders;
+        //return orders;
     }
 
-    private Order parseLine(String line){
+    private void parseLine(String line, String fileName, int lineIndex){
         try {
             String[] parseLine = csvParser.parseLine(line);
             OrderBuilder orderBuilder = context.getBean("orderBuilder", OrderBuilder.class);
@@ -107,7 +98,9 @@ class CsvOrdersPackParser implements OrdersIO, ApplicationContextAware {
             orderBuilder.setAmount(parseLine[1]);
             orderBuilder.setCurrency(parseLine[2]);
             orderBuilder.setComment(parseLine[3]);
-            return orderBuilder.buildOrder();
+            orderBuilder.setFileName(fileName);
+            orderBuilder.setLineIndex(lineIndex);
+            orderBuilder.buildOrder();
             /*
             order.setOrderId(Integer.parseInt(parseLine[0]));
             parseAmount(order, parseLine[1]);
@@ -117,7 +110,6 @@ class CsvOrdersPackParser implements OrdersIO, ApplicationContextAware {
             // TODO !
             //LOGGER.error("line not parsed in order id: "+order.getOrderId()+" from file: "+order.getFileName());
         }
-        return null;
     }
     /*
     private void parseLine(Order order, String line){
