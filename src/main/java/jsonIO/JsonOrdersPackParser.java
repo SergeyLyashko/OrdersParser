@@ -2,7 +2,6 @@ package jsonIO;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonDeserializer;
 import executors.OrdersIO;
 import jsonhandlers.OrderBuilderDeserializer;
 import jsonhandlers.OrdersPackDeserializer;
@@ -11,7 +10,6 @@ import orders.OrdersPack;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.Scope;
@@ -29,15 +27,9 @@ class JsonOrdersPackParser implements OrdersIO, ApplicationContextAware {
 
     private static final Logger LOGGER = LogManager.getLogger(JsonOrdersPackParser.class.getName());
 
-    private JsonDeserializer<OrdersPack> jsonDeserializer;
     private String fileName;
     private ApplicationContext context;
     private CountDownLatch countDownLatch;
-
-    @Autowired
-    public void setJsonDeserializer(JsonDeserializer<OrdersPack> jsonDeserializer){
-        this.jsonDeserializer = jsonDeserializer;
-    }
 
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {

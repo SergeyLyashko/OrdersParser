@@ -24,9 +24,9 @@ import java.util.stream.Stream;
 
 @Service("csvOrdersParser")
 @Scope("prototype")
-class CsvOrdersPackParser implements OrdersIO, ApplicationContextAware {
+class CsvOrdersParser implements OrdersIO, ApplicationContextAware {
 
-    private static final Logger LOGGER = LogManager.getLogger(CsvOrdersPackParser.class.getName());
+    private static final Logger LOGGER = LogManager.getLogger(CsvOrdersParser.class.getName());
 
     private ApplicationContext context;
     private OrdersPack ordersPack;
