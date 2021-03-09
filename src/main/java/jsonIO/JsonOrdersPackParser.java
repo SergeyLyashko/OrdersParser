@@ -3,11 +3,9 @@ package jsonIO;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonDeserializer;
-import com.google.gson.reflect.TypeToken;
 import executors.OrdersIO;
 import jsonhandlers.OrderBuilderDeserializer;
-import orders.BuilderPack;
-import orders.Order;
+import jsonhandlers.OrdersPackDeserializer;
 import orders.OrderBuilder;
 import orders.OrdersPack;
 import org.apache.logging.log4j.LogManager;
@@ -20,11 +18,9 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
-import java.lang.reflect.Type;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.List;
 import java.util.concurrent.CountDownLatch;
 
 @Service("jsonOrdersParser")
@@ -60,50 +56,29 @@ class JsonOrdersPackParser implements OrdersIO, ApplicationContextAware {
 
     @Override
     public void run() {
-        // TODO TEST
-        Thread.currentThread().setName("json-parser");
-        // TODO убрать !!!
-        System.out.println(Thread.currentThread().getName()+Thread.currentThread().getId());
         parse(fileName);
         countDownLatch.countDown();
-        // TODO убрать !!!
-        System.out.println("count down: "+countDownLatch.getCount());
     }
 
     private void parse(String fileName) {
-        JsonDeserializer<OrderBuilder> jsonDeserializer = context.getBean("orderBuilderDeserializer", OrderBuilderDeserializer.class);
-
+        OrdersPackDeserializer ordersPackDeserializer = context.getBean("packDeserializer", OrdersPackDeserializer.class);
+        OrderBuilderDeserializer orderBuilderDeserializer = context.getBean("orderBuilderDeserializer", OrderBuilderDeserializer.class);
+        orderBuilderDeserializer.setFile(fileName);
         Gson gson = new GsonBuilder()
-                .registerTypeAdapter(OrderBuilderDeserializer.class, jsonDeserializer)
-                .create();
-        BufferedReader reader = readFile(fileName);
-        if(reader != null) {
-            gson.fromJson(reader, BuilderPack.class);
-        }
-    }
-
-    /*
-    private void parse(String fileName) {
-        OrdersPackAdapter ordersPackAdapter = context.getBean("ordersPackAdapter", OrdersPackAdapter.class);
-        ordersPackAdapter.setFileName(fileName);
-        Type orderListType = new TypeToken<List<Order>>() {}.getType();
-        Gson gson = new GsonBuilder()
-                .registerTypeAdapter(OrdersPack.class, jsonDeserializer)
-                .registerTypeAdapter(orderListType, ordersPackAdapter)
+                .registerTypeAdapter(OrderBuilder.class, orderBuilderDeserializer)
+                .registerTypeAdapter(OrdersPack.class, ordersPackDeserializer)
                 .create();
         BufferedReader reader = readFile(fileName);
         if(reader != null) {
             gson.fromJson(reader, OrdersPack.class);
         }
-    }*/
+    }
 
     private BufferedReader readFile(String fileName) {
         try {
             return Files.newBufferedReader(Paths.get(fileName), StandardCharsets.UTF_8);
         } catch (IOException ex) {
             LOGGER.error("File "+fileName+" was not found and will not be included for parsing.");
-            // TODO убрать !!!
-            //System.err.println("File "+fileName+" was not found and will not be included for parsing.");
         }
         return null;
     }

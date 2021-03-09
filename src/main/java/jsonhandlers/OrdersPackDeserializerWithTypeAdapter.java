@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Type;
 import java.util.List;
-
+/*
 @Service("jsonDeserializer")
 class OrdersPackDeserializerWithTypeAdapter implements JsonDeserializer<OrdersPack> {
 
@@ -29,3 +29,5 @@ class OrdersPackDeserializerWithTypeAdapter implements JsonDeserializer<OrdersPa
         return ordersPack;
     }
 }
+
+ */

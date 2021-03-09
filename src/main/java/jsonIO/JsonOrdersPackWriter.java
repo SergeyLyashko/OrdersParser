@@ -18,41 +18,35 @@ import java.util.List;
 import java.util.concurrent.CountDownLatch;
 
 @Service("ordersWriter")
-class JsonOrdersPackWriter implements OrdersIO, ApplicationContextAware {
+class JsonOrdersPackWriter implements OrdersIO/*, ApplicationContextAware*/ {
 
     private static final Logger LOGGER = LogManager.getLogger(JsonOrdersPackWriter.class.getName());
 
     // TODO ????/
-    private JsonSerializer<OrdersPack> jsonSerializer;
+    //private JsonSerializer<OrdersPack> jsonSerializer;
     private OrdersPack ordersPack;
-    private ApplicationContext context;
+    //private ApplicationContext context;
     private CountDownLatch countDownLatch;
-
+    /*
     @Autowired
     public void setJsonSerializer(JsonSerializer<OrdersPack> jsonSerializer){
         this.jsonSerializer = jsonSerializer;
-    }
+    }*/
 
     @Autowired
     public void setOrdersPack(OrdersPack ordersPack){
         this.ordersPack = ordersPack;
     }
-
+    /*
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         this.context = applicationContext;
-    }
+    }*/
 
     @Override
     public void run() {
-        Thread.currentThread().setName("writer");
-        // TODO убрать !!!
-        System.out.println(Thread.currentThread().getName()+Thread.currentThread().getId());
         try {
-            // TODO убрать !!!
-            System.out.println("writer await");
             countDownLatch.await();
-            System.out.println("writer start! count down: "+countDownLatch.getCount());
             stdOutPrint();
         } catch (InterruptedException ex) {
             LOGGER.error("Thread"+Thread.currentThread().getName()+Thread.currentThread().getId()+"is interrupted", ex);

@@ -3,7 +3,6 @@ package orders;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.Scope;
@@ -17,7 +16,6 @@ public class OrderBuilder implements ApplicationContextAware {
 
     private static final Logger LOGGER = LogManager.getLogger(OrderBuilder.class.getName());
     private ApplicationContext applicationContext;
-    private OrdersPack ordersPack;
 
     private String orderId;
     private String amount;
@@ -25,11 +23,6 @@ public class OrderBuilder implements ApplicationContextAware {
     private String comment;
     private String fileName;
     private int lineIndex;
-
-    @Autowired
-    public void setOrdersPack(OrdersPack ordersPack){
-        this.ordersPack = ordersPack;
-    }
 
     public void setOrderId(String orderId) {
         this.orderId = orderId;
@@ -47,7 +40,7 @@ public class OrderBuilder implements ApplicationContextAware {
         this.comment = comment;
     }
 
-    public void buildOrder() {
+    public Order buildOrder() {
         Order order = applicationContext.getBean("order", Order.class);
         order.setResult("OK");
         order.setOrderId(Integer.parseInt(orderId));
@@ -56,9 +49,8 @@ public class OrderBuilder implements ApplicationContextAware {
         order.setComment(comment);
         order.setFileName(fileName);
         order.setLine(lineIndex);
-        ordersPack.addOrder(order);
+        return order;
     }
-
 
     private void parseAmount(Order order, String cell) {
         try {

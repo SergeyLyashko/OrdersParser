@@ -18,7 +18,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Currency;
 import java.util.List;
-
+/*
 @Service("ordersPackAdapter")
 @Scope("prototype")
 class OrdersPackAdapterImpl extends TypeAdapter<List<Order>> implements OrdersPackAdapter, ApplicationContextAware {
@@ -118,3 +118,5 @@ class OrdersPackAdapterImpl extends TypeAdapter<List<Order>> implements OrdersPa
         this.context = applicationContext;
     }
 }
+
+ */

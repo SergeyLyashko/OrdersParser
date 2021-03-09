@@ -61,8 +61,6 @@ class ExecutorsParsersImpl implements ExecutorsParsers {
                 parsersPool.add(ordersIO);
             } catch (NoSuchFieldException ex) {
                 LOGGER.error("Not found methods for parsing this file: "+file);
-                // TODO убрать !!!
-                //System.err.println("Not found methods for parsing this file: "+file);
             }
         });
     }

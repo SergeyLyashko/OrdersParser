@@ -9,7 +9,7 @@ import orders.OrdersPack;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Type;
-
+/*
 @Service("jsonSerializer")
 class OrdersPackSerializerWithTypeAdapter implements JsonSerializer<OrdersPack> {
 
@@ -21,3 +21,6 @@ class OrdersPackSerializerWithTypeAdapter implements JsonSerializer<OrdersPack> 
         return newJsonObject;
     }
 }
+
+
+ */
