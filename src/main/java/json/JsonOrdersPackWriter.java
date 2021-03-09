@@ -1,4 +1,4 @@
-package jsonIO;
+package json;
 
 import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;

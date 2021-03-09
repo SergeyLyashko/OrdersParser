@@ -1,11 +1,9 @@
-package jsonIO;
+package json;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import executors.OrdersIO;
-import jsonhandlers.OrderBuilderDeserializer;
-import jsonhandlers.OrdersPackDeserializer;
-import orders.OrderBuilder;
+import orders.OrderBuilderImpl;
 import orders.OrdersPack;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -57,7 +55,7 @@ class JsonOrdersPackParser implements OrdersIO, ApplicationContextAware {
         OrderBuilderDeserializer orderBuilderDeserializer = context.getBean("orderBuilderDeserializer", OrderBuilderDeserializer.class);
         orderBuilderDeserializer.setFile(fileName);
         Gson gson = new GsonBuilder()
-                .registerTypeAdapter(OrderBuilder.class, orderBuilderDeserializer)
+                .registerTypeAdapter(OrderBuilderImpl.class, orderBuilderDeserializer)
                 .registerTypeAdapter(OrdersPack.class, ordersPackDeserializer)
                 .create();
         BufferedReader reader = readFile(fileName);
