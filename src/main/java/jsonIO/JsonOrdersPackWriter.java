@@ -5,6 +5,8 @@ import com.google.gson.reflect.TypeToken;
 import executors.OrdersIO;
 import orders.Order;
 import orders.OrdersPack;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -18,6 +20,9 @@ import java.util.concurrent.CountDownLatch;
 @Service("ordersWriter")
 class JsonOrdersPackWriter implements OrdersIO, ApplicationContextAware {
 
+    private static final Logger LOGGER = LogManager.getLogger(JsonOrdersPackWriter.class.getName());
+
+    // TODO ????/
     private JsonSerializer<OrdersPack> jsonSerializer;
     private OrdersPack ordersPack;
     private ApplicationContext context;
@@ -41,15 +46,16 @@ class JsonOrdersPackWriter implements OrdersIO, ApplicationContextAware {
     @Override
     public void run() {
         Thread.currentThread().setName("writer");
-        System.out.println(Thread.currentThread().getName());
+        // TODO убрать !!!
+        System.out.println(Thread.currentThread().getName()+Thread.currentThread().getId());
         try {
+            // TODO убрать !!!
             System.out.println("writer await");
             countDownLatch.await();
             System.out.println("writer start! count down: "+countDownLatch.getCount());
             stdOutPrint();
-        } catch (InterruptedException e) {
-            // TODO обработать
-            e.printStackTrace();
+        } catch (InterruptedException ex) {
+            LOGGER.error("Thread"+Thread.currentThread().getName()+Thread.currentThread().getId()+"is interrupted", ex);
         }
     }
 

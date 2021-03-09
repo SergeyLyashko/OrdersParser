@@ -1,6 +1,8 @@
 package executors;
 
 import main.ExecutorsParsers;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -14,6 +16,8 @@ import java.util.concurrent.Executors;
 
 @Service("executorsParsers")
 class ExecutorsParsersImpl implements ExecutorsParsers {
+
+    private static final Logger LOGGER = LogManager.getLogger(ExecutorsParsersImpl.class.getName());
 
     // защелка
     private CountDownLatch countDownLatch;
@@ -55,8 +59,10 @@ class ExecutorsParsersImpl implements ExecutorsParsers {
                 OrdersIO ordersIO = fileParser.parse(file);
                 ordersIO.setFile(file);
                 parsersPool.add(ordersIO);
-            } catch (NoSuchFieldException e) {
-                System.err.println("Not found methods for parsing this file: "+file);
+            } catch (NoSuchFieldException ex) {
+                LOGGER.error("Not found methods for parsing this file: "+file);
+                // TODO убрать !!!
+                //System.err.println("Not found methods for parsing this file: "+file);
             }
         });
     }

@@ -6,6 +6,8 @@ import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
 import jsonIO.OrdersPackAdapter;
 import orders.Order;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
@@ -20,6 +22,8 @@ import java.util.List;
 @Service("ordersPackAdapter")
 @Scope("prototype")
 class OrdersPackAdapterImpl extends TypeAdapter<List<Order>> implements OrdersPackAdapter, ApplicationContextAware {
+
+    private static final Logger LOGGER = LogManager.getLogger(OrdersPackAdapterImpl.class.getName());
 
     private ApplicationContext context;
     private String fileName;
@@ -96,6 +100,7 @@ class OrdersPackAdapterImpl extends TypeAdapter<List<Order>> implements OrdersPa
             order.setAmount(Double.parseDouble(jsonReader.nextString()));
         }catch (NumberFormatException | IOException ex){
             order.setResult("ERROR: the amount is not readable");
+            LOGGER.info("amount is not readable in order id: "+order.getOrderId()+" from file: "+order.getFileName());
         }
     }
 
@@ -104,6 +109,7 @@ class OrdersPackAdapterImpl extends TypeAdapter<List<Order>> implements OrdersPa
             order.setCurrency(Currency.getInstance(jsonReader.nextString()));
         }catch (IllegalArgumentException | IOException ex){
             order.setResult("ERROR: the currency not defined");
+            LOGGER.info("currency not defined in order id:"+order.getOrderId()+" from file: "+order.getFileName());
         }
     }
 

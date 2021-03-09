@@ -7,6 +7,8 @@ import com.google.gson.reflect.TypeToken;
 import executors.OrdersIO;
 import orders.Order;
 import orders.OrdersPack;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -25,6 +27,8 @@ import java.util.concurrent.CountDownLatch;
 @Service("jsonOrdersParser")
 @Scope("prototype")
 class JsonOrdersPackParser implements OrdersIO, ApplicationContextAware {
+
+    private static final Logger LOGGER = LogManager.getLogger(JsonOrdersPackParser.class.getName());
 
     private JsonDeserializer<OrdersPack> jsonDeserializer;
     private String fileName;
@@ -55,9 +59,11 @@ class JsonOrdersPackParser implements OrdersIO, ApplicationContextAware {
     public void run() {
         // TODO TEST
         Thread.currentThread().setName("json-parser");
-        System.out.println(Thread.currentThread().getName());
+        // TODO убрать !!!
+        System.out.println(Thread.currentThread().getName()+Thread.currentThread().getId());
         parse(fileName);
         countDownLatch.countDown();
+        // TODO убрать !!!
         System.out.println("count down: "+countDownLatch.getCount());
     }
 
@@ -78,8 +84,10 @@ class JsonOrdersPackParser implements OrdersIO, ApplicationContextAware {
     private BufferedReader readFile(String fileName) {
         try {
             return Files.newBufferedReader(Paths.get(fileName), StandardCharsets.UTF_8);
-        } catch (IOException e) {
-            System.err.println("File "+fileName+" was not found and will not be included for parsing.");
+        } catch (IOException ex) {
+            LOGGER.error("File "+fileName+" was not found and will not be included for parsing.");
+            // TODO убрать !!!
+            //System.err.println("File "+fileName+" was not found and will not be included for parsing.");
         }
         return null;
     }
