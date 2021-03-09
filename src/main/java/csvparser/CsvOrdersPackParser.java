@@ -2,6 +2,7 @@ package csvparser;
 
 import com.opencsv.CSVParser;
 import orders.Order;
+import orders.OrderBuilder;
 import orders.OrdersPack;
 import executors.OrdersIO;
 import org.apache.logging.log4j.LogManager;
@@ -76,12 +77,19 @@ class CsvOrdersPackParser implements OrdersIO, ApplicationContextAware {
         try(Stream<String> lines = Files.lines(Paths.get(fileName), StandardCharsets.UTF_8)){
             AtomicInteger index = new AtomicInteger(1);
             lines.skip(1).forEach(line -> {
+                Order order = parseLine(line);
+                if(order != null) {
+                    order.setFileName(fileName);
+                    order.setLine(index.getAndIncrement());
+                    orders.add(order);
+                }
+                /*
                 Order order = context.getBean("order", Order.class);
                 order.setResult("OK");
                 order.setFileName(fileName);
                 order.setLine(index.getAndIncrement());
                 parseLine(order, line);
-                orders.add(order);
+                orders.add(order);*/
             });
         } catch (IOException ex) {
             LOGGER.error("File "+fileName+" was not found and will not be included for parsing.");
@@ -91,6 +99,27 @@ class CsvOrdersPackParser implements OrdersIO, ApplicationContextAware {
         return orders;
     }
 
+    private Order parseLine(String line){
+        try {
+            String[] parseLine = csvParser.parseLine(line);
+            OrderBuilder orderBuilder = context.getBean("orderBuilder", OrderBuilder.class);
+            orderBuilder.setOrderId(parseLine[0]);
+            orderBuilder.setAmount(parseLine[1]);
+            orderBuilder.setCurrency(parseLine[2]);
+            orderBuilder.setComment(parseLine[3]);
+            return orderBuilder.buildOrder();
+            /*
+            order.setOrderId(Integer.parseInt(parseLine[0]));
+            parseAmount(order, parseLine[1]);
+            parseCurrency(order, parseLine[2]);
+            order.setComment(parseLine[3]);*/
+        } catch (IOException ex) {
+            // TODO !
+            //LOGGER.error("line not parsed in order id: "+order.getOrderId()+" from file: "+order.getFileName());
+        }
+        return null;
+    }
+    /*
     private void parseLine(Order order, String line){
         try {
             String[] parseLine = csvParser.parseLine(line);
@@ -119,7 +148,7 @@ class CsvOrdersPackParser implements OrdersIO, ApplicationContextAware {
             order.setResult("ERROR: the currency not defined");
             LOGGER.info("currency not defined in order id:"+order.getOrderId()+" from file: "+order.getFileName());
         }
-    }
+    }*/
 
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
