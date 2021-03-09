@@ -5,7 +5,10 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.reflect.TypeToken;
 import executors.OrdersIO;
+import jsonhandlers.OrderBuilderDeserializer;
+import orders.BuilderPack;
 import orders.Order;
+import orders.OrderBuilder;
 import orders.OrdersPack;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -68,6 +71,19 @@ class JsonOrdersPackParser implements OrdersIO, ApplicationContextAware {
     }
 
     private void parse(String fileName) {
+        JsonDeserializer<OrderBuilder> jsonDeserializer = context.getBean("orderBuilderDeserializer", OrderBuilderDeserializer.class);
+
+        Gson gson = new GsonBuilder()
+                .registerTypeAdapter(OrderBuilderDeserializer.class, jsonDeserializer)
+                .create();
+        BufferedReader reader = readFile(fileName);
+        if(reader != null) {
+            gson.fromJson(reader, BuilderPack.class);
+        }
+    }
+
+    /*
+    private void parse(String fileName) {
         OrdersPackAdapter ordersPackAdapter = context.getBean("ordersPackAdapter", OrdersPackAdapter.class);
         ordersPackAdapter.setFileName(fileName);
         Type orderListType = new TypeToken<List<Order>>() {}.getType();
@@ -79,7 +95,7 @@ class JsonOrdersPackParser implements OrdersIO, ApplicationContextAware {
         if(reader != null) {
             gson.fromJson(reader, OrdersPack.class);
         }
-    }
+    }*/
 
     private BufferedReader readFile(String fileName) {
         try {

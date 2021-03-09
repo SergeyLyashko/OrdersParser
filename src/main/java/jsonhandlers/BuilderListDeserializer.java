@@ -2,6 +2,7 @@ package jsonhandlers;
 
 import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
+import orders.BuilderPack;
 import orders.Order;
 import orders.OrderBuilder;
 import org.springframework.stereotype.Service;
@@ -12,13 +13,16 @@ import java.util.List;
 import java.util.Map;
 
 @Service("builderList")
-public class BuilderListDeserializer implements JsonDeserializer<List<OrderBuilder>> {
+public class BuilderListDeserializer implements JsonDeserializer<BuilderPack> {
+
+
 
     @Override
-    public List<OrderBuilder> deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext context) throws JsonParseException {
+    public BuilderPack deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext context) throws JsonParseException {
         JsonObject jsonObject = jsonElement.getAsJsonObject();
         Type ordersListType = new TypeToken<List<OrderBuilder>>() {}.getType();
-        return context.deserialize(jsonObject.getAsJsonArray("orders"), ordersListType);
+        List<OrderBuilder> builders = context.deserialize(jsonObject.getAsJsonArray(""), ordersListType);
+
 
         /*
         List<OrderBuilder> builderList = new ArrayList<>();
