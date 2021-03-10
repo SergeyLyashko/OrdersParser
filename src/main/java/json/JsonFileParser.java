@@ -3,7 +3,7 @@ package json;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonDeserializer;
-import executors.FileParser;
+import filehandlers.FileParser;
 import orders.OrderBuilder;
 import orders.OrdersPack;
 import org.apache.logging.log4j.LogManager;
@@ -22,6 +22,9 @@ import java.util.concurrent.CountDownLatch;
 
 @Service("jsonFileParser")
 @Scope("prototype")
+/**
+ * Parser of json files based on Gson library
+ */
 class JsonFileParser implements FileParser, ApplicationContextAware {
 
     private static final Logger LOGGER = LogManager.getLogger(JsonFileParser.class.getName());
@@ -50,6 +53,9 @@ class JsonFileParser implements FileParser, ApplicationContextAware {
         countDownLatch.countDown();
     }
 
+    /*
+     * Parser of json file with generic deserializers
+     */
     private void parseFile(String fileName) {
         JsonDeserializer<OrdersPack> ordersPackDeserializer = context.getBean("packDeserializer", OrdersPackDeserializer.class);
         OrderBuilderDeserializer orderBuilderDeserializer = context.getBean("builderDeserializer", OrderBuilderDeserializer.class);
@@ -65,6 +71,9 @@ class JsonFileParser implements FileParser, ApplicationContextAware {
         }
     }
 
+    /*
+     * NIO file buffered reader
+     */
     private BufferedReader readFile(String fileName) {
         try {
             return Files.newBufferedReader(Paths.get(fileName), StandardCharsets.UTF_8);

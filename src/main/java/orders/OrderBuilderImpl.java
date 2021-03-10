@@ -11,6 +11,10 @@ import org.springframework.stereotype.Service;
 
 import java.util.Currency;
 
+/**
+ * Build orders on parsing data from files.
+ * Add order to pack.
+ */
 @Service("orderBuilder")
 @Scope("prototype")
 class OrderBuilderImpl implements OrderBuilder, ApplicationContextAware {

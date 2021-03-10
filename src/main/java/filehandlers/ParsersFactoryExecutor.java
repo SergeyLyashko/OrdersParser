@@ -1,4 +1,4 @@
-package executors;
+package filehandlers;
 
 import json.OrdersPrinter;
 import main.ParsersExecutor;
@@ -44,6 +44,11 @@ class ParsersFactoryExecutor implements ParsersExecutor {
         this.ordersPrinter = ordersPrinter;
     }
 
+    /**
+     * Execute pool of handlers file with count down latch
+     * for threads of parsers & thread of printer result
+     * @param filesFromCommandLine
+     */
     public void execute(String[] filesFromCommandLine) {
         addParsersPool(filesFromCommandLine);
         setCountDownLatch();

@@ -1,4 +1,4 @@
-package executors;
+package filehandlers;
 
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
@@ -15,6 +15,12 @@ class FileParserFactory implements ApplicationContextAware {
     private static final Pattern FILE_EXTENSION_PATTERN = Pattern.compile(FILE_EXTENSION_REGEX);
     private ApplicationContext context;
 
+    /**
+     * Create a bean of parse handler for the specified file extension
+     * @param fileName parsed file
+     * @return interface implementation of parser handler
+     * @throws NoSuchFieldException
+     */
     FileParser createParser(String fileName) throws NoSuchFieldException {
         String fileExtension = defineFileExtension(fileName);
         switch (fileExtension){

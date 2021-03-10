@@ -34,7 +34,7 @@ class OrdersPackDeserializer implements JsonDeserializer<OrdersPack> {
 
     private void readAsArray(JsonArray jsonArray, JsonDeserializationContext context) {
         for(int index=1; index<= jsonArray.size(); index++){
-            readAsPrimitive(jsonArray.get(index-1), context, index);
+            deserializeElement(jsonArray.get(index-1), context, index);
         }
     }
 
@@ -45,13 +45,13 @@ class OrdersPackDeserializer implements JsonDeserializer<OrdersPack> {
                 readAsArray(jsonArray, context);
             }
             else if(entry.getValue().isJsonPrimitive()){
-                readAsPrimitive(jsonObject, context, 1);
+                deserializeElement(jsonObject, context, 1);
                 return;
             }
         }
     }
 
-    private void readAsPrimitive(JsonElement jsonElement, JsonDeserializationContext context, int lineIndex) {
+    private void deserializeElement(JsonElement jsonElement, JsonDeserializationContext context, int lineIndex) {
         OrderBuilder orderBuilder = context.deserialize(jsonElement, OrderBuilder.class);
         orderBuilder.setLineIndex(lineIndex);
         orderBuilder.buildOrder();

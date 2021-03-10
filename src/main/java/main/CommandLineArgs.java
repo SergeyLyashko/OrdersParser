@@ -4,6 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import picocli.CommandLine;
 
+/**
+ * Class for args from command line & runnable handler.
+ * Based on Picocli lib.
+ */
 @Service("commandLine")
 class CommandLineArgs implements Runnable {
 

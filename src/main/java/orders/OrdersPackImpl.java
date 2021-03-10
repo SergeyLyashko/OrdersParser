@@ -6,11 +6,12 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
- * Pack of orders from files
+ * Pack of orders
  */
 @Component("ordersPack")
 class OrdersPackImpl implements OrdersPack {
 
+    // Concurrency orders packaging
     private final List<Order> pack = new CopyOnWriteArrayList<>();
 
     @Override

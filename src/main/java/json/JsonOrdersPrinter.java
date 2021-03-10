@@ -1,6 +1,6 @@
 package json;
 
-import com.google.gson.*;
+import com.google.gson.Gson;
 import orders.OrdersPack;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -12,13 +12,23 @@ import java.util.concurrent.CountDownLatch;
 class JsonOrdersPrinter implements OrdersPrinter {
 
     private static final Logger LOGGER = LogManager.getLogger(JsonOrdersPrinter.class.getName());
-
     private OrdersPack ordersPack;
     private CountDownLatch countDownLatch;
+    private Gson gson;
 
     @Autowired
     public void setOrdersPack(OrdersPack ordersPack){
         this.ordersPack = ordersPack;
+    }
+
+    @Autowired
+    public void setGson(Gson gson){
+        this.gson = gson;
+    }
+
+    @Override
+    public void setCountDownLatch(CountDownLatch countDownLatch) {
+        this.countDownLatch = countDownLatch;
     }
 
     @Override
@@ -32,12 +42,8 @@ class JsonOrdersPrinter implements OrdersPrinter {
     }
 
     private void stdOutPrint(){
-        JsonElement element = new Gson().toJsonTree(ordersPack.getOrdersList());
-        element.getAsJsonArray().forEach(System.out::println);
-    }
-
-    @Override
-    public void setCountDownLatch(CountDownLatch countDownLatch) {
-        this.countDownLatch = countDownLatch;
+        gson.toJsonTree(ordersPack.getOrdersList())
+                .getAsJsonArray()
+                .forEach(System.out::println);
     }
 }
