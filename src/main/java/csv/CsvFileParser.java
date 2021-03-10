@@ -4,7 +4,7 @@ import com.opencsv.CSVParser;
 import orders.Order;
 import orders.OrderBuilder;
 import orders.OrdersPack;
-import executors.OrdersRunnableIO;
+import executors.FileParser;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.BeansException;
@@ -22,11 +22,11 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Stream;
 
-@Service("csvOrdersParser")
+@Service("csvFileParser")
 @Scope("prototype")
-class CsvOrdersParser implements OrdersRunnableIO, ApplicationContextAware {
+class CsvFileParser implements FileParser, ApplicationContextAware {
 
-    private static final Logger LOGGER = LogManager.getLogger(CsvOrdersParser.class.getName());
+    private static final Logger LOGGER = LogManager.getLogger(CsvFileParser.class.getName());
 
     private ApplicationContext context;
     private OrdersPack ordersPack;
@@ -56,11 +56,11 @@ class CsvOrdersParser implements OrdersRunnableIO, ApplicationContextAware {
 
     @Override
     public void run() {
-        parse(fileName);
+        parseFile(fileName);
         countDownLatch.countDown();
     }
 
-    private void parse(String fileName) {
+    private void parseFile(String fileName) {
         try(Stream<String> lines = Files.lines(Paths.get(fileName), StandardCharsets.UTF_8)){
             AtomicInteger index = new AtomicInteger(1);
             lines.skip(1).forEach(line -> {

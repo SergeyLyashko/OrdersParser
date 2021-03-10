@@ -1,10 +1,8 @@
-package executors;
+package json;
 
 import java.util.concurrent.CountDownLatch;
 
-public interface OrdersRunnableIO extends Runnable {
-
-    void setFile(String fileName);
+public interface OrdersPrinter extends Runnable {
 
     void setCountDownLatch(CountDownLatch countDownLatch);
 }

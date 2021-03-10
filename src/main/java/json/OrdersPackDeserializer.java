@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Type;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicInteger;
 
 @Service("packDeserializer")
 class OrdersPackDeserializer implements JsonDeserializer<OrdersPack> {
@@ -35,8 +34,9 @@ class OrdersPackDeserializer implements JsonDeserializer<OrdersPack> {
     }
 
     private void readAsArray(JsonArray jsonArray, JsonDeserializationContext context) {
-        AtomicInteger index = new AtomicInteger(1);
-        jsonArray.forEach(element -> readAsPrimitive(element, context, index.getAndIncrement()));
+        for(int index=1; index<= jsonArray.size(); index++){
+            readAsPrimitive(jsonArray.get(index-1), context, index);
+        }
     }
 
     private void readAsObject(JsonObject jsonObject, JsonDeserializationContext context){

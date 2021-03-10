@@ -50,6 +50,21 @@ class OrderBuilderImpl implements OrderBuilder, ApplicationContextAware {
     }
 
     @Override
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+        this.applicationContext = applicationContext;
+    }
+
+    @Override
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
+    }
+
+    @Override
+    public void setLineIndex(int lineIndex) {
+        this.lineIndex = lineIndex;
+    }
+
+    @Override
     public Order buildOrder() {
         Order order = applicationContext.getBean("order", Order.class);
         order.setResult("OK");
@@ -93,20 +108,5 @@ class OrderBuilderImpl implements OrderBuilder, ApplicationContextAware {
             LOGGER.info("currency not defined in order id:"+order.getOrderId()+" from file: "+order.getFileName());
         }
         return null;
-    }
-
-    @Override
-    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-        this.applicationContext = applicationContext;
-    }
-
-    @Override
-    public void setFileName(String fileName) {
-        this.fileName = fileName;
-    }
-
-    @Override
-    public void setLineIndex(int lineIndex) {
-        this.lineIndex = lineIndex;
     }
 }

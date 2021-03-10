@@ -1,10 +1,10 @@
 package executors;
 
-import main.ExecutorParsers;
+import json.OrdersPrinter;
+import main.ParsersExecutor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
@@ -14,51 +14,51 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-@Service("executorParsers")
-class ExecutorParsersImpl implements ExecutorParsers {
+/**
+ * Executor services of parsing files & print to stdout.
+ */
+@Service("parsersExecutor")
+class ParsersFactoryExecutor implements ParsersExecutor {
 
-    private static final Logger LOGGER = LogManager.getLogger(ExecutorParsersImpl.class.getName());
-
-    // защелка
+    private static final Logger LOGGER = LogManager.getLogger(ParsersFactoryExecutor.class.getName());
     private CountDownLatch countDownLatch;
-    private final ExecutorService writer;
+    private final ExecutorService printerService;
     private final ExecutorService parseService;
-    private final Queue<OrdersRunnableIO> parsersPool;
-    private OrdersRunnableIO ordersPrinter;
-    private FileParser fileParser;
+    private final Queue<FileParser> parsersPool;
+    private OrdersPrinter ordersPrinter;
+    private FileParserFactory fileParserFactory;
 
-    public ExecutorParsersImpl(){
+    public ParsersFactoryExecutor(){
         parsersPool = new ConcurrentLinkedQueue<>();
-        writer = Executors.newSingleThreadExecutor();
+        printerService = Executors.newSingleThreadExecutor();
         parseService = Executors.newCachedThreadPool();
     }
 
     @Autowired
-    public void setFileParser(FileParser fileParser){
-        this.fileParser = fileParser;
+    public void setFileParser(FileParserFactory fileParserFactory){
+        this.fileParserFactory = fileParserFactory;
     }
 
     @Autowired
-    @Qualifier("ordersPrinter")
-    public void setOrdersPrinter(OrdersRunnableIO ordersPrinter){
+    public void setOrdersPrinter(OrdersPrinter ordersPrinter){
         this.ordersPrinter = ordersPrinter;
     }
 
-    public void execute(String[] commandLineFiles) {
-        addParsersPool(commandLineFiles);
+    public void execute(String[] filesFromCommandLine) {
+        addParsersPool(filesFromCommandLine);
         setCountDownLatch();
         parsersPool.forEach(parseService::execute);
-        writer.execute(ordersPrinter);
-        writer.shutdown();
+        printerService.execute(ordersPrinter);
+        printerService.shutdown();
         parseService.shutdown();
     }
 
     private void addParsersPool(String[] files){
         Arrays.stream(files).forEach(file -> {
             try {
-                OrdersRunnableIO ordersRunnableIO = fileParser.parse(file);
-                ordersRunnableIO.setFile(file);
-                parsersPool.add(ordersRunnableIO);
+                FileParser fileParser = fileParserFactory.createParser(file);
+                fileParser.setFile(file);
+                parsersPool.add(fileParser);
             } catch (NoSuchFieldException ex) {
                 LOGGER.error("Not found methods for parsing this file: "+file);
             }

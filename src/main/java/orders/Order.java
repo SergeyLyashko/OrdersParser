@@ -8,10 +8,8 @@ public interface Order {
     int getOrderId();
 
     void setAmount(double amount);
-    double getAmount();
 
     void setCurrency(Currency currency);
-    Currency getCurrency();
 
     void setComment(String comment);
     String getComment();
@@ -20,8 +18,6 @@ public interface Order {
     String getFileName();
 
     void setLine(int line);
-    int getLine();
 
     void setResult(String result);
-    String getResult();
 }

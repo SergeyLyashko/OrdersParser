@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Type;
 
-@Service("orderBuilderDeserializer")
+@Service("builderDeserializer")
 @Scope("prototype")
 class OrderBuilderDeserializer implements JsonDeserializer<OrderBuilder>, ApplicationContextAware {
 

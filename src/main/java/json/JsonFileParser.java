@@ -3,13 +3,12 @@ package json;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonDeserializer;
-import executors.OrdersRunnableIO;
+import executors.FileParser;
 import orders.OrderBuilder;
 import orders.OrdersPack;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.Scope;
@@ -21,22 +20,14 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.concurrent.CountDownLatch;
 
-@Service("jsonOrdersParser")
+@Service("jsonFileParser")
 @Scope("prototype")
-class JsonOrdersParser implements OrdersRunnableIO, ApplicationContextAware {
+class JsonFileParser implements FileParser, ApplicationContextAware {
 
-    private static final Logger LOGGER = LogManager.getLogger(JsonOrdersParser.class.getName());
-
+    private static final Logger LOGGER = LogManager.getLogger(JsonFileParser.class.getName());
     private String fileName;
     private ApplicationContext context;
     private CountDownLatch countDownLatch;
-
-    private GsonBuilder gsonBuilder;
-
-    @Autowired
-    public void setGsonBuilder(GsonBuilder gsonBuilder){
-        this.gsonBuilder = gsonBuilder;
-    }
 
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
@@ -55,14 +46,15 @@ class JsonOrdersParser implements OrdersRunnableIO, ApplicationContextAware {
 
     @Override
     public void run() {
-        parse(fileName);
+        parseFile(fileName);
         countDownLatch.countDown();
     }
 
-    private void parse(String fileName) {
+    private void parseFile(String fileName) {
         JsonDeserializer<OrdersPack> ordersPackDeserializer = context.getBean("packDeserializer", OrdersPackDeserializer.class);
-        OrderBuilderDeserializer orderBuilderDeserializer = context.getBean("orderBuilderDeserializer", OrderBuilderDeserializer.class);
+        OrderBuilderDeserializer orderBuilderDeserializer = context.getBean("builderDeserializer", OrderBuilderDeserializer.class);
         orderBuilderDeserializer.setFile(fileName);
+        GsonBuilder gsonBuilder = context.getBean("gsonBuilder", GsonBuilder.class);
         Gson gson = gsonBuilder
                 .registerTypeAdapter(OrderBuilder.class, orderBuilderDeserializer)
                 .registerTypeAdapter(OrdersPack.class, ordersPackDeserializer)

@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 import java.util.Currency;
 
 /**
- * Order
+ * This order is one parse unit of file
  */
 @Component("order")
 @Scope("prototype")
@@ -38,18 +38,8 @@ class OrderImpl implements Order {
     }
 
     @Override
-    public double getAmount(){
-        return amount;
-    }
-
-    @Override
     public void setCurrency(Currency currency){
         this.currency = currency;
-    }
-
-    @Override
-    public Currency getCurrency(){
-        return currency;
     }
 
     @Override
@@ -78,17 +68,29 @@ class OrderImpl implements Order {
     }
 
     @Override
+    public void setResult(String result){
+        this.result = result;
+    }
+    /*
+    //@Override
+    public double getAmount(){
+        return amount;
+    }
+
+    //@Override
+    public Currency getCurrency(){
+        return currency;
+    }
+
+    //@Override
     public int getLine(){
         return line;
     }
 
-    @Override
-    public void setResult(String result){
-        this.result = result;
-    }
-
-    @Override
+    //@Override
     public String getResult(){
         return result;
     }
+
+     */
 }

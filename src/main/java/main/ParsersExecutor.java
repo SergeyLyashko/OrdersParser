@@ -1,6 +1,6 @@
 package main;
 
-public interface ExecutorParsers {
+public interface ParsersExecutor {
 
     void execute(String[] commandLineFiles);
 }
