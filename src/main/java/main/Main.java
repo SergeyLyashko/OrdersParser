@@ -10,8 +10,6 @@ public class Main {
 
         ApplicationContext context = new AnnotationConfigApplicationContext(ApplicationConfiguration.class);
         CommandLineArgsHandler commandLine = context.getBean("commandLine", CommandLineArgsHandler.class);
-        // TODO !!! убрать тестовую строку файлов
-        new CommandLine(commandLine).execute( "orders3.xlsx", "orders1.json", "orders2.csv", "orders2.json", "orders1.csv", "orders3.json");
-        // "orders1.json", "orders3.xlsx", "orders2.csv", "orders2.json", "orders1.csv"
+        new CommandLine(commandLine).execute(args);
     }
 }
