@@ -2,7 +2,7 @@ package executors;
 
 import java.util.concurrent.CountDownLatch;
 
-public interface OrdersIO extends Runnable {
+public interface OrdersRunnableIO extends Runnable {
 
     void setFile(String fileName);
 

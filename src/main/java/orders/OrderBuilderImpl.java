@@ -24,22 +24,27 @@ class OrderBuilderImpl implements OrderBuilder, ApplicationContextAware {
     private String fileName;
     private int lineIndex;
 
+    @Override
     public void setOrderId(String orderId) {
         this.orderId = orderId;
     }
 
+    @Override
     public void setAmount(String amount) {
         this.amount = amount;
     }
 
+    @Override
     public void setCurrency(String currency) {
         this.currency = currency;
     }
 
+    @Override
     public void setComment(String comment) {
         this.comment = comment;
     }
 
+    @Override
     public Order buildOrder() {
         Order order = applicationContext.getBean("order", Order.class);
         order.setResult("OK");
@@ -56,7 +61,7 @@ class OrderBuilderImpl implements OrderBuilder, ApplicationContextAware {
         try {
             order.setAmount(Double.parseDouble(cell));
         }catch (NumberFormatException ex){
-            order.setResult("ERROR: the amount is not readable");
+            order.setResult("ERROR: wrong amount value");
             LOGGER.info("amount is not readable in order id: "+order.getOrderId()+" from file: "+order.getFileName());
         }
     }
@@ -65,7 +70,7 @@ class OrderBuilderImpl implements OrderBuilder, ApplicationContextAware {
         try{
             order.setCurrency(Currency.getInstance(cell));
         }catch (IllegalArgumentException ex){
-            order.setResult("ERROR: the currency not defined");
+            order.setResult("ERROR: wrong currency code");
             LOGGER.info("currency not defined in order id:"+order.getOrderId()+" from file: "+order.getFileName());
         }
     }
@@ -75,10 +80,12 @@ class OrderBuilderImpl implements OrderBuilder, ApplicationContextAware {
         this.applicationContext = applicationContext;
     }
 
+    @Override
     public void setFileName(String fileName) {
         this.fileName = fileName;
     }
 
+    @Override
     public void setLineIndex(int lineIndex) {
         this.lineIndex = lineIndex;
     }

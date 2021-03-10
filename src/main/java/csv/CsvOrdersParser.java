@@ -4,7 +4,7 @@ import com.opencsv.CSVParser;
 import orders.Order;
 import orders.OrderBuilder;
 import orders.OrdersPack;
-import executors.OrdersIO;
+import executors.OrdersRunnableIO;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.BeansException;
@@ -24,7 +24,7 @@ import java.util.stream.Stream;
 
 @Service("csvOrdersParser")
 @Scope("prototype")
-class CsvOrdersParser implements OrdersIO, ApplicationContextAware {
+class CsvOrdersParser implements OrdersRunnableIO, ApplicationContextAware {
 
     private static final Logger LOGGER = LogManager.getLogger(CsvOrdersParser.class.getName());
 

@@ -2,7 +2,7 @@ package json;
 
 import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
-import executors.OrdersIO;
+import executors.OrdersRunnableIO;
 import orders.Order;
 import orders.OrdersPack;
 import org.apache.logging.log4j.LogManager;
@@ -14,10 +14,10 @@ import java.lang.reflect.Type;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 
-@Service("ordersWriter")
-class JsonOrdersPackWriter implements OrdersIO {
+@Service("ordersPrinter")
+class JsonOrdersPrinter implements OrdersRunnableIO {
 
-    private static final Logger LOGGER = LogManager.getLogger(JsonOrdersPackWriter.class.getName());
+    private static final Logger LOGGER = LogManager.getLogger(JsonOrdersPrinter.class.getName());
 
     private OrdersPack ordersPack;
     private CountDownLatch countDownLatch;

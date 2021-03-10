@@ -12,12 +12,12 @@ import java.lang.reflect.Type;
 
 @Service("orderBuilderDeserializer")
 @Scope("prototype")
-public class OrderBuilderDeserializer implements JsonDeserializer<OrderBuilder>, ApplicationContextAware {
+class OrderBuilderDeserializer implements JsonDeserializer<OrderBuilder>, ApplicationContextAware {
 
     private ApplicationContext applicationContext;
     private String fileName;
 
-    public void setFile(String fileName) {
+    void setFile(String fileName) {
         this.fileName = fileName;
     }
 

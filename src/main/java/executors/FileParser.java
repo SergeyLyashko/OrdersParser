@@ -15,13 +15,13 @@ class FileParser implements ApplicationContextAware {
     private static final Pattern FILE_EXTENSION = Pattern.compile(FILE_EXTENSION_REGEX);
     private ApplicationContext context;
 
-    OrdersIO parse(String fileName) throws NoSuchFieldException {
+    OrdersRunnableIO parse(String fileName) throws NoSuchFieldException {
         String fileExtension = fileExtensionParser(fileName);
         switch (fileExtension){
             case "json":
-                return context.getBean("jsonOrdersParser", OrdersIO.class);
+                return context.getBean("jsonOrdersParser", OrdersRunnableIO.class);
             case "csv":
-                return context.getBean("csvOrdersParser", OrdersIO.class);
+                return context.getBean("csvOrdersParser", OrdersRunnableIO.class);
             default:
                 throw new NoSuchFieldException();
         }

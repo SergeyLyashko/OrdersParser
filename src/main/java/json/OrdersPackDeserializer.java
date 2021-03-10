@@ -12,7 +12,7 @@ import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Service("packDeserializer")
-public class OrdersPackDeserializer implements JsonDeserializer<OrdersPack> {
+class OrdersPackDeserializer implements JsonDeserializer<OrdersPack> {
 
     private OrdersPack ordersPack;
 

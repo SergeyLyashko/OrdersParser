@@ -1,6 +1,6 @@
 package executors;
 
-import main.ExecutorsParsers;
+import main.ExecutorParsers;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,20 +14,20 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-@Service("executorsParsers")
-class ExecutorsParsersImpl implements ExecutorsParsers {
+@Service("executorParsers")
+class ExecutorParsersImpl implements ExecutorParsers {
 
-    private static final Logger LOGGER = LogManager.getLogger(ExecutorsParsersImpl.class.getName());
+    private static final Logger LOGGER = LogManager.getLogger(ExecutorParsersImpl.class.getName());
 
     // защелка
     private CountDownLatch countDownLatch;
     private final ExecutorService writer;
     private final ExecutorService parseService;
-    private final Queue<OrdersIO> parsersPool;
-    private OrdersIO orderWriter;
+    private final Queue<OrdersRunnableIO> parsersPool;
+    private OrdersRunnableIO ordersPrinter;
     private FileParser fileParser;
 
-    public ExecutorsParsersImpl(){
+    public ExecutorParsersImpl(){
         parsersPool = new ConcurrentLinkedQueue<>();
         writer = Executors.newSingleThreadExecutor();
         parseService = Executors.newCachedThreadPool();
@@ -39,16 +39,16 @@ class ExecutorsParsersImpl implements ExecutorsParsers {
     }
 
     @Autowired
-    @Qualifier("ordersWriter")
-    public void setOrdersWriter(OrdersIO orderWriter){
-        this.orderWriter = orderWriter;
+    @Qualifier("ordersPrinter")
+    public void setOrdersPrinter(OrdersRunnableIO ordersPrinter){
+        this.ordersPrinter = ordersPrinter;
     }
 
     public void execute(String[] commandLineFiles) {
         addParsersPool(commandLineFiles);
         setCountDownLatch();
         parsersPool.forEach(parseService::execute);
-        writer.execute(orderWriter);
+        writer.execute(ordersPrinter);
         writer.shutdown();
         parseService.shutdown();
     }
@@ -56,9 +56,9 @@ class ExecutorsParsersImpl implements ExecutorsParsers {
     private void addParsersPool(String[] files){
         Arrays.stream(files).forEach(file -> {
             try {
-                OrdersIO ordersIO = fileParser.parse(file);
-                ordersIO.setFile(file);
-                parsersPool.add(ordersIO);
+                OrdersRunnableIO ordersRunnableIO = fileParser.parse(file);
+                ordersRunnableIO.setFile(file);
+                parsersPool.add(ordersRunnableIO);
             } catch (NoSuchFieldException ex) {
                 LOGGER.error("Not found methods for parsing this file: "+file);
             }
@@ -69,6 +69,6 @@ class ExecutorsParsersImpl implements ExecutorsParsers {
         int filesCount = parsersPool.size();
         countDownLatch = new CountDownLatch(filesCount);
         parsersPool.forEach(parser -> parser.setCountDownLatch(countDownLatch));
-        orderWriter.setCountDownLatch(countDownLatch);
+        ordersPrinter.setCountDownLatch(countDownLatch);
     }
 }
