@@ -1,4 +1,4 @@
-package filehandlers;
+package main;
 
 import java.util.concurrent.CountDownLatch;
 

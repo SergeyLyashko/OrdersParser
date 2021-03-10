@@ -1,5 +1,7 @@
-package filehandlers;
+package parsersfactory;
 
+import main.FileParser;
+import main.ParserFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
@@ -9,7 +11,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Service("parserFactory")
-class FileParserFactory implements ApplicationContextAware {
+class FileParserFactory implements ParserFactory, ApplicationContextAware {
 
     private static final String FILE_EXTENSION_REGEX = "[\\S]+[.]([\\S]+)";
     private static final Pattern FILE_EXTENSION_PATTERN = Pattern.compile(FILE_EXTENSION_REGEX);
@@ -21,7 +23,8 @@ class FileParserFactory implements ApplicationContextAware {
      * @return interface implementation of parser handler
      * @throws NoSuchFieldException
      */
-    FileParser createParser(String fileName) throws NoSuchFieldException {
+    @Override
+    public FileParser createParser(String fileName) throws NoSuchFieldException {
         String fileExtension = defineFileExtension(fileName);
         switch (fileExtension){
             case "json":

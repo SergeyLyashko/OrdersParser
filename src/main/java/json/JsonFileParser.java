@@ -3,7 +3,7 @@ package json;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonDeserializer;
-import filehandlers.FileParser;
+import main.FileParser;
 import orders.OrderBuilder;
 import orders.OrdersPack;
 import org.apache.logging.log4j.LogManager;
@@ -20,11 +20,11 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.concurrent.CountDownLatch;
 
-@Service("jsonFileParser")
-@Scope("prototype")
 /**
  * Parser of json files based on Gson library
  */
+@Service("jsonFileParser")
+@Scope("prototype")
 class JsonFileParser implements FileParser, ApplicationContextAware {
 
     private static final Logger LOGGER = LogManager.getLogger(JsonFileParser.class.getName());

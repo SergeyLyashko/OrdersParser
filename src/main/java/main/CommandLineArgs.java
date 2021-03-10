@@ -16,7 +16,7 @@ class CommandLineArgs implements Runnable {
     private ParsersExecutor parsersExecutor;
 
     @Autowired
-    public void setExecutorsParsers(ParsersExecutor parsersExecutor){
+    public void setParsersExecutors(ParsersExecutor parsersExecutor){
         this.parsersExecutor = parsersExecutor;
     }
 
