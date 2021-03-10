@@ -1,23 +1,60 @@
 package orders;
 
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
+
 import java.util.Currency;
 
-public interface Order {
+/**
+ * This order is one parse unit of file
+ */
+@Component("order")
+@Scope("prototype")
+class Order {
 
-    void setOrderId(int orderId);
-    int getOrderId();
+    private int id;
+    private int line;
+    private double amount;
+    private Currency currency;
+    private String comment;
+    private String filename;
+    private String result;
 
-    void setAmount(double amount);
+    public Order(){}
 
-    void setCurrency(Currency currency);
+    public void setOrderId(int orderId){
+        this.id = orderId;
+    }
 
-    void setComment(String comment);
-    String getComment();
+    public void setLine(int line){
+        this.line = line;
+    }
 
-    void setFileName(String fileName);
-    String getFileName();
+    public void setResult(String result){
+        this.result = result;
+    }
 
-    void setLine(int line);
+    public void setAmount(double amount){
+        this.amount = amount;
+    }
 
-    void setResult(String result);
+    public void setCurrency(Currency currency){
+        this.currency = currency;
+    }
+
+    public void setComment(String comment){
+        this.comment = comment;
+    }
+
+    public void setFileName(String fileName){
+        this.filename = fileName;
+    }
+
+    public int getOrderId(){
+        return id;
+    }
+
+    public String getFileName(){
+        return filename;
+    }
 }

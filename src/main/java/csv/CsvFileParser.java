@@ -1,9 +1,7 @@
 package csv;
 
 import com.opencsv.CSVParser;
-import orders.Order;
 import orders.OrderBuilder;
-import orders.OrdersPack;
 import executors.FileParser;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -29,15 +27,9 @@ class CsvFileParser implements FileParser, ApplicationContextAware {
     private static final Logger LOGGER = LogManager.getLogger(CsvFileParser.class.getName());
 
     private ApplicationContext context;
-    private OrdersPack ordersPack;
     private CSVParser csvParser;
     private String fileName;
     private CountDownLatch countDownLatch;
-
-    @Autowired
-    public void setOrdersPack(OrdersPack ordersPack){
-        this.ordersPack = ordersPack;
-    }
 
     @Autowired
     public void setCsvParser(CSVParser csvParser){
@@ -63,18 +55,13 @@ class CsvFileParser implements FileParser, ApplicationContextAware {
     private void parseFile(String fileName) {
         try(Stream<String> lines = Files.lines(Paths.get(fileName), StandardCharsets.UTF_8)){
             AtomicInteger index = new AtomicInteger(1);
-            lines.skip(1).forEach(line -> {
-                Order order = parseLine(line, fileName, index.getAndIncrement());
-                if(order != null){
-                    ordersPack.addOrder(order);
-                }
-            });
+            lines.skip(1).forEach(line -> parseLine(line, fileName, index.getAndIncrement()));
         } catch (IOException ex) {
             LOGGER.error("File "+fileName+" was not found and will not be included for parsing.");
         }
     }
 
-    private Order parseLine(String line, String fileName, int lineIndex){
+    private void parseLine(String line, String fileName, int lineIndex){
         try {
             String[] parseLine = csvParser.parseLine(line);
             OrderBuilder orderBuilder = context.getBean("orderBuilder", OrderBuilder.class);
@@ -84,11 +71,10 @@ class CsvFileParser implements FileParser, ApplicationContextAware {
             orderBuilder.setComment(parseLine[3]);
             orderBuilder.setFileName(fileName);
             orderBuilder.setLineIndex(lineIndex);
-            return orderBuilder.buildOrder();
+            orderBuilder.buildOrder();
         } catch (IOException ex) {
             LOGGER.error("line not parsed in order from file: "+fileName);
         }
-        return null;
     }
 
     @Override

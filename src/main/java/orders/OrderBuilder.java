@@ -14,5 +14,5 @@ public interface OrderBuilder {
 
     void setLineIndex(int lineIndex);
 
-    Order buildOrder();
+    void buildOrder();
 }
