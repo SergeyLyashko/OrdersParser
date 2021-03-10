@@ -15,6 +15,7 @@ import java.util.Currency;
 class OrderBuilderImpl implements OrderBuilder, ApplicationContextAware {
 
     private static final Logger LOGGER = LogManager.getLogger(OrderBuilderImpl.class.getName());
+    private final StringBuffer errorString;
     private ApplicationContext applicationContext;
 
     private String orderId;
@@ -23,6 +24,10 @@ class OrderBuilderImpl implements OrderBuilder, ApplicationContextAware {
     private String comment;
     private String fileName;
     private int lineIndex;
+
+    OrderBuilderImpl() {
+        errorString = new StringBuffer("ERROR: ");
+    }
 
     @Override
     public void setOrderId(String orderId) {
@@ -49,30 +54,45 @@ class OrderBuilderImpl implements OrderBuilder, ApplicationContextAware {
         Order order = applicationContext.getBean("order", Order.class);
         order.setResult("OK");
         order.setOrderId(Integer.parseInt(orderId));
-        parseAmount(order, amount);
-        parseCurrency(order, currency);
-        order.setComment(comment);
         order.setFileName(fileName);
+        order.setComment(comment);
         order.setLine(lineIndex);
+        setCheckedValue(order);
         return order;
     }
 
-    private void parseAmount(Order order, String cell) {
-        try {
-            order.setAmount(Double.parseDouble(cell));
-        }catch (NumberFormatException ex){
-            order.setResult("ERROR: wrong amount value");
-            LOGGER.info("amount is not readable in order id: "+order.getOrderId()+" from file: "+order.getFileName());
+    private void setCheckedValue(Order order){
+        double parseAmount = parseAmount(amount, order);
+        Currency parseCurrency = parseCurrency(currency, order);
+        if(parseAmount == -1 || parseCurrency == null){
+            order.setResult(errorString.toString().trim());
+        }
+        if(parseAmount != -1){
+            order.setAmount(parseAmount);
+        }
+        if(currency != null){
+            order.setCurrency(parseCurrency);
         }
     }
 
-    private void parseCurrency(Order order, String cell) {
+    private double parseAmount(String cell, Order order) {
+        try {
+            return Double.parseDouble(cell);
+        }catch (NumberFormatException ex){
+            errorString.append("wrong amount value ");
+            LOGGER.info("amount is not readable in order id: "+order.getOrderId()+" from file: "+order.getFileName());
+        }
+        return -1;
+    }
+
+    private Currency parseCurrency(String cell, Order order) {
         try{
-            order.setCurrency(Currency.getInstance(cell));
+            return Currency.getInstance(cell);
         }catch (IllegalArgumentException ex){
-            order.setResult("ERROR: wrong currency code");
+            errorString.append("wrong currency code ");
             LOGGER.info("currency not defined in order id:"+order.getOrderId()+" from file: "+order.getFileName());
         }
+        return null;
     }
 
     @Override
