@@ -54,6 +54,6 @@ class OrdersPackDeserializer implements JsonDeserializer<OrdersPack> {
     private void deserializeElement(JsonElement jsonElement, JsonDeserializationContext context, int lineIndex) {
         OrderBuilder orderBuilder = context.deserialize(jsonElement, OrderBuilder.class);
         orderBuilder.setLineIndex(lineIndex);
-        orderBuilder.buildOrder();
+        ordersPack.addOrder(orderBuilder.buildOrder());
     }
 }

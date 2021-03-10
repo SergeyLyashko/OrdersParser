@@ -3,6 +3,7 @@ package csv;
 import com.opencsv.CSVParser;
 import orders.OrderBuilder;
 import filehandlers.FileParser;
+import orders.OrdersPack;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.BeansException;
@@ -30,10 +31,16 @@ class CsvFileParser implements FileParser, ApplicationContextAware {
     private CSVParser csvParser;
     private String fileName;
     private CountDownLatch countDownLatch;
+    private OrdersPack ordersPack;
 
     @Autowired
     public void setCsvParser(CSVParser csvParser){
         this.csvParser = csvParser;
+    }
+
+    @Autowired
+    public void setOrdersPack(OrdersPack ordersPack){
+        this.ordersPack = ordersPack;
     }
 
     @Override
@@ -71,7 +78,7 @@ class CsvFileParser implements FileParser, ApplicationContextAware {
             orderBuilder.setComment(parseLine[3]);
             orderBuilder.setFileName(fileName);
             orderBuilder.setLineIndex(lineIndex);
-            orderBuilder.buildOrder();
+            ordersPack.addOrder(orderBuilder.buildOrder());
         } catch (IOException ex) {
             LOGGER.error("line not parsed in order from file: "+fileName);
         }

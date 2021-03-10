@@ -12,7 +12,11 @@ import java.util.concurrent.CopyOnWriteArrayList;
 class OrdersPackImpl implements OrdersPack {
 
     // Concurrency orders packaging
-    private final List<Order> pack = new CopyOnWriteArrayList<>();
+    private final List<Order> pack;
+
+    OrdersPackImpl(){
+        pack = new CopyOnWriteArrayList<>();
+    }
 
     @Override
     public List<Order> getOrdersList() {

@@ -3,7 +3,6 @@ package orders;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.Scope;
@@ -22,7 +21,6 @@ class OrderBuilderImpl implements OrderBuilder, ApplicationContextAware {
     private static final Logger LOGGER = LogManager.getLogger(OrderBuilderImpl.class.getName());
     private final StringBuffer errorString;
     private ApplicationContext applicationContext;
-    private OrdersPack ordersPack;
     private String orderId;
     private String amount;
     private String currency;
@@ -32,11 +30,6 @@ class OrderBuilderImpl implements OrderBuilder, ApplicationContextAware {
 
     OrderBuilderImpl() {
         errorString = new StringBuffer("ERROR: ");
-    }
-
-    @Autowired
-    public void setOrdersPack(OrdersPack ordersPack){
-        this.ordersPack = ordersPack;
     }
 
     @Override
@@ -75,7 +68,7 @@ class OrderBuilderImpl implements OrderBuilder, ApplicationContextAware {
     }
 
     @Override
-    public void buildOrder() {
+    public Order buildOrder() {
         Order order = applicationContext.getBean("order", Order.class);
         order.setResult("OK");
         order.setOrderId(Integer.parseInt(orderId));
@@ -83,7 +76,7 @@ class OrderBuilderImpl implements OrderBuilder, ApplicationContextAware {
         order.setComment(comment);
         order.setLine(lineIndex);
         setCheckedValue(order);
-        ordersPack.addOrder(order);
+        return order;
     }
 
     private void setCheckedValue(Order order){
