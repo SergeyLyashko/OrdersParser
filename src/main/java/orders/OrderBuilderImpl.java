@@ -12,7 +12,7 @@ import java.util.Currency;
 
 @Service("orderBuilder")
 @Scope("prototype")
-public class OrderBuilderImpl implements OrderBuilder, ApplicationContextAware {
+class OrderBuilderImpl implements OrderBuilder, ApplicationContextAware {
 
     private static final Logger LOGGER = LogManager.getLogger(OrderBuilderImpl.class.getName());
     private ApplicationContext applicationContext;

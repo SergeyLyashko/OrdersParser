@@ -2,7 +2,7 @@ package json;
 
 import com.google.gson.*;
 import orders.Order;
-import orders.OrderBuilderImpl;
+import orders.OrderBuilder;
 import orders.OrdersPack;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -53,7 +53,7 @@ public class OrdersPackDeserializer implements JsonDeserializer<OrdersPack> {
     }
 
     private void readAsPrimitive(JsonElement jsonElement, JsonDeserializationContext context, int lineIndex) {
-        OrderBuilderImpl orderBuilder = context.deserialize(jsonElement, OrderBuilderImpl.class);
+        OrderBuilder orderBuilder = context.deserialize(jsonElement, OrderBuilder.class);
         orderBuilder.setLineIndex(lineIndex);
         Order order = orderBuilder.buildOrder();
         ordersPack.addOrder(order);

@@ -1,7 +1,7 @@
 package json;
 
 import com.google.gson.*;
-import orders.OrderBuilderImpl;
+import orders.OrderBuilder;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
@@ -12,7 +12,7 @@ import java.lang.reflect.Type;
 
 @Service("orderBuilderDeserializer")
 @Scope("prototype")
-public class OrderBuilderDeserializer implements JsonDeserializer<OrderBuilderImpl>, ApplicationContextAware {
+public class OrderBuilderDeserializer implements JsonDeserializer<OrderBuilder>, ApplicationContextAware {
 
     private ApplicationContext applicationContext;
     private String fileName;
@@ -27,9 +27,9 @@ public class OrderBuilderDeserializer implements JsonDeserializer<OrderBuilderIm
     }
 
     @Override
-    public OrderBuilderImpl deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext context) throws JsonParseException {
+    public OrderBuilder deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext context) throws JsonParseException {
         JsonObject jsonObject = jsonElement.getAsJsonObject();
-        OrderBuilderImpl orderBuilder = applicationContext.getBean("orderBuilder", OrderBuilderImpl.class);
+        OrderBuilder orderBuilder = applicationContext.getBean("orderBuilder", OrderBuilder.class);
         orderBuilder.setFileName(fileName);
         orderBuilder.setOrderId(jsonObject.get("orderId").getAsString());
         orderBuilder.setAmount(jsonObject.get("amount").getAsString());
