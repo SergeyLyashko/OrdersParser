@@ -38,7 +38,7 @@ class JsonFileParser implements FileParser, ApplicationContextAware {
     }
 
     @Override
-    public void setFile(String fileName) {
+    public void addParsedFile(String fileName) {
         this.fileName = fileName;
     }
 

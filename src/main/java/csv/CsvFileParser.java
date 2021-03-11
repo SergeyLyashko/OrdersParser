@@ -44,7 +44,7 @@ class CsvFileParser implements FileParser, ApplicationContextAware {
     }
 
     @Override
-    public void setFile(String fileName) {
+    public void addParsedFile(String fileName) {
         this.fileName = fileName;
     }
 
@@ -80,7 +80,7 @@ class CsvFileParser implements FileParser, ApplicationContextAware {
             orderBuilder.setLineIndex(lineIndex);
             ordersPack.addOrder(orderBuilder.buildOrder());
         } catch (IOException ex) {
-            LOGGER.error("line not parsed in order from file: "+fileName);
+            LOGGER.error("line "+lineIndex+" not parsed from file: "+fileName);
         }
     }
 
