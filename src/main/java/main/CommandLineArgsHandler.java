@@ -1,5 +1,6 @@
 package main;
 
+import json.OrdersPrinter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,7 @@ import picocli.CommandLine;
 import java.util.Arrays;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.CountDownLatch;
 
 /**
  * Class for args from command line & runnable handler.
@@ -21,8 +23,10 @@ class CommandLineArgsHandler implements Runnable {
 
     @CommandLine.Parameters(index = "0..*")
     private String[] files;
-    private ParsersExecutor parsersExecutor;
+    private HandlersExecutorImpl handlersExecutor;
     private ParserFactory parserFactory;
+    private OrdersPrinter ordersPrinter;
+    private CountDownLatch countDownLatch;
 
     @Autowired
     public void setParserFactory(ParserFactory parserFactory){
@@ -30,15 +34,22 @@ class CommandLineArgsHandler implements Runnable {
     }
 
     @Autowired
-    public void setParsersExecutors(ParsersExecutor parsersExecutor){
-        this.parsersExecutor = parsersExecutor;
+    public void setParsersExecutors(HandlersExecutorImpl handlersExecutor){
+        this.handlersExecutor = handlersExecutor;
+    }
+
+    @Autowired
+    public void setOrdersPrinter(OrdersPrinter ordersPrinter){
+        this.ordersPrinter = ordersPrinter;
     }
 
     @Override
     public void run() {
         if(files.length != 0) {
             Queue<FileParser> parsersPool = createParsersPool(files);
-            parsersExecutor.execute(parsersPool);
+            setCountDownLatch(parsersPool);
+            handlersExecutor.execute(parsersPool);
+            handlersExecutor.execute(ordersPrinter);
         }
     }
 
@@ -54,5 +65,12 @@ class CommandLineArgsHandler implements Runnable {
             }
         });
         return parsersPool;
+    }
+
+    private void setCountDownLatch(Queue<FileParser> parsersPool){
+        int filesCount = parsersPool.size();
+        countDownLatch = new CountDownLatch(filesCount);
+        parsersPool.forEach(parser -> parser.setCountDownLatch(countDownLatch));
+        ordersPrinter.setCountDownLatch(countDownLatch);
     }
 }
