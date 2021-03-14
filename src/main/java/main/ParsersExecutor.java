@@ -13,7 +13,7 @@ import java.util.concurrent.Executors;
  * Executor services of parsing files & print to stdout.
  */
 @Service("parsersExecutor")
-class ParsersExecutor {
+public class ParsersExecutor {
 
     private CountDownLatch countDownLatch;
     private final ExecutorService printerService;
@@ -35,7 +35,7 @@ class ParsersExecutor {
      * for threads of parsers & thread of printer result
      * @param parsersPool
      */
-    void execute(Queue<FileParser> parsersPool) {
+    public void execute(Queue<FileParser> parsersPool) {
         setCountDownLatch(parsersPool);
         parsersPool.forEach(parseService::execute);
         printerService.execute(ordersPrinter);

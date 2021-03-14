@@ -4,7 +4,7 @@ import java.util.concurrent.CountDownLatch;
 
 public interface FileParser extends Runnable {
 
-    void addParsedFile(String fileName);
+    void setParsedFile(String fileName);
 
     void setCountDownLatch(CountDownLatch countDownLatch);
 }

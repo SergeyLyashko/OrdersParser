@@ -47,7 +47,7 @@ class CommandLineArgsHandler implements Runnable {
         Arrays.stream(files).forEach(file -> {
             try {
                 FileParser fileParser = parserFactory.createParser(file);
-                fileParser.addParsedFile(file);
+                fileParser.setParsedFile(file);
                 parsersPool.add(fileParser);
             } catch (NoSuchFieldException ex) {
                 LOGGER.error("Not found methods for parsing this file: "+file);

@@ -44,7 +44,7 @@ class CsvFileParser implements FileParser, ApplicationContextAware {
     }
 
     @Override
-    public void addParsedFile(String fileName) {
+    public void setParsedFile(String fileName) {
         this.fileName = fileName;
     }
 

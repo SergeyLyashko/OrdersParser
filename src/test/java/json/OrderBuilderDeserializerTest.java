@@ -21,4 +21,6 @@ public class OrderBuilderDeserializerTest {
         OrderBuilder orderBuilderMock = mock(OrderBuilder.class);
         when(deserializerMock.deserialize(jsonElementMock, typeMock, contextMock)).thenReturn(orderBuilderMock);
     }
+
+
 }
